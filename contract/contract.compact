@@ -1,0 +1,80 @@
+// ============================================================================
+// Midnight Network Smart Contract: Verifiable Private Eligibility Gate
+// Language: Compact (Midnight Smart Contract DSL)
+// Level: 3 Production Specification
+// ============================================================================
+
+export ledger totalVerifications: Counter;
+export ledger minAgeThreshold: Uint<16>;
+export ledger gateActive: Boolean;
+export ledger admin: Bytes<32>;
+
+// ----------------------------------------------------------------------------
+// Private Witnesses (Executed strictly inside user's local client prover)
+// ----------------------------------------------------------------------------
+// userAgeWitness: Returns user's confidential age/birthyear attribute
+witness userAgeWitness(): Uint<16>;
+
+// userEntropyWitness: Salt to prevent linkability/correlation across proofs
+witness userEntropyWitness(): Bytes<32>;
+
+// ----------------------------------------------------------------------------
+// Constructor
+// ----------------------------------------------------------------------------
+constructor(initialMinAge: Uint<16>, adminPublicKey: Bytes<32>) {
+    minAgeThreshold = initialMinAge;
+    gateActive = true;
+    admin = adminPublicKey;
+}
+
+// ----------------------------------------------------------------------------
+// Circuits (Zero-Knowledge Verifiable Transitions)
+// ----------------------------------------------------------------------------
+
+/**
+ * @notice Verifies user eligibility against threshold without disclosing age.
+ * @dev Evaluates predicate in ZK witness sandbox. Only the boolean result is disclosed.
+ * @return Boolean representing verified eligibility status.
+ */
+export circuit verifyEligibility(): Boolean {
+    // 1. Assert public ledger preconditions
+    assert gateActive "Eligibility Gate is currently paused or inactive";
+
+    // 2. Ingest private witness data into client-side ZK prover sandbox
+    const age = userAgeWitness();
+    const entropy = userEntropyWitness();
+
+    // 3. Sanity check private input constraints within the circuit
+    assert age < 150 "Invalid age witness: out of human bounds";
+
+    // 4. Compute privacy-preserving predicate
+    const eligible: Boolean = age >= minAgeThreshold;
+
+    // 5. Explicitly disclose ONLY the boolean outcome to the public ledger
+    // Crucial: The 'age' and 'entropy' variables NEVER leave the private witness scope.
+    const isDisclosedEligible: Boolean = disclose(eligible);
+
+    // 6. On-chain state mutation upon successful proof verification
+    if (isDisclosedEligible) {
+        totalVerifications.increment(1);
+    }
+
+    return isDisclosedEligible;
+}
+
+/**
+ * @notice Administrative circuit to adjust the gate's minimum threshold.
+ * @param newThreshold The new minimum required age.
+ */
+export circuit setMinAgeThreshold(newThreshold: Uint<16>): Void {
+    assert newThreshold > 0 "Threshold must be greater than zero";
+    minAgeThreshold = newThreshold;
+}
+
+/**
+ * @notice Administrative circuit to pause or unpause the eligibility gate.
+ * @param active New active status for the gate.
+ */
+export circuit setGateActive(active: Boolean): Void {
+    gateActive = active;
+}
