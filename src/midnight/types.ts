@@ -36,8 +36,23 @@ export interface ContractState {
   contractAddress: string;
 }
 
+export type ProverErrorCode = 
+  | 'ERR_CONSTRAINT_VIOLATION'
+  | 'ERR_WITNESS_OUT_OF_BOUNDS'
+  | 'ERR_GATE_INACTIVE'
+  | 'ERR_PROOF_GENERATION_FAILED'
+  | 'ERR_NETWORK_DISCONNECTED';
+
+export interface ProverError {
+  code: ProverErrorCode;
+  message: string;
+  details?: Record<string, unknown>;
+}
+
 export interface ZKProofWitnessInput {
   age: number;
   birthDate?: string;
   salt?: string;
+  enclaveId?: string;
 }
+
