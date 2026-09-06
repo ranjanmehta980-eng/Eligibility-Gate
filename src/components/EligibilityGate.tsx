@@ -205,8 +205,10 @@ export const EligibilityGate: React.FC<EligibilityGateProps> = ({ onSuccessBadge
               min="10"
               max="100"
               value={ageInput}
+              aria-label="Private age witness slider"
+              title="Drag to simulate different confidential age values"
               onChange={(e) => handleAgeChange(parseInt(e.target.value) || 0)}
-              className="w-full h-2 bg-midnight-950 rounded-lg appearance-none cursor-pointer accent-purple-500"
+              className="w-full h-2 bg-midnight-950 rounded-lg appearance-none cursor-pointer accent-purple-500 transition-all focus:outline-none focus:ring-2 focus:ring-purple-500/50"
             />
             <div className="flex justify-between text-[11px] font-mono text-purple-400/50">
               <span>10 yrs</span>
