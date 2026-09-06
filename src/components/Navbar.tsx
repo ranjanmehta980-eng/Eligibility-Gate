@@ -71,7 +71,7 @@ export const Navbar: React.FC<NavbarProps> = ({ onNavSelect, activeTab = 'gate' 
         </div>
 
         {/* Navigation Tabs */}
-        <nav className="hidden md:flex items-center space-x-1 p-1 bg-midnight-900/60 rounded-xl border border-purple-900/30">
+        <nav className="hidden md:flex items-center space-x-1 p-1 bg-midnight-900/60 rounded-xl border border-purple-900/30 shadow-inner">
           {[
             { id: 'gate', label: 'ZK Gate' },
             { id: 'explorer', label: 'Privacy Explorer' },
@@ -81,9 +81,9 @@ export const Navbar: React.FC<NavbarProps> = ({ onNavSelect, activeTab = 'gate' 
             <button
               key={item.id}
               onClick={() => onNavSelect?.(item.id)}
-              className={`px-4 py-2 text-sm font-medium rounded-lg transition-all ${
+              className={`px-4 py-2 text-sm font-medium rounded-lg transition-all duration-200 ${
                 activeTab === item.id
-                  ? 'bg-purple-600/30 text-purple-200 border border-purple-500/40 shadow-sm'
+                  ? 'bg-purple-600/30 text-purple-200 border border-purple-500/40 shadow-sm shadow-purple-950'
                   : 'text-purple-300/70 hover:text-purple-100 hover:bg-purple-900/20'
               }`}
             >
