@@ -282,6 +282,13 @@ export const PrivacyExplorer: React.FC = () => {
               </p>
             </div>
           </div>
+
+          <div className="p-4 rounded-xl bg-purple-950/20 border border-purple-800/30 text-xs text-purple-200/90 font-mono space-y-1">
+            <span className="text-purple-400 font-bold block">Cryptographic Nullifier Invariant:</span>
+            <p className="text-purple-300/80 font-mono">
+              Nullifier = Poseidon_Hash(userPrivateKey, circuitId, salt) &rarr; Zero identity linkage across verification sessions.
+            </p>
+          </div>
         </div>
       )}
 
