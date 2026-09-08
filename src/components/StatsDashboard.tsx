@@ -184,9 +184,11 @@ export const StatsDashboard: React.FC = () => {
                 Real-time Zero-Knowledge proof settlements recorded on Midnight testnet
               </p>
             </div>
-            <span className="px-2.5 py-1 rounded-md text-[11px] font-mono badge-public">
-              PREPROD FEED
-            </span>
+            <div className="flex items-center space-x-2">
+              <span className="px-2.5 py-1 rounded-md text-[11px] font-mono badge-public">
+                PREPROD FEED
+              </span>
+            </div>
           </div>
 
           <div className="space-y-3">
