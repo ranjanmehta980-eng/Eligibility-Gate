@@ -90,7 +90,7 @@ export const AccessBadgeModal: React.FC<AccessBadgeModalProps> = ({ badgeData, o
             <span className="text-purple-300 font-medium">Privacy Status:</span>
             <span className="text-emerald-400 font-bold flex items-center space-x-1">
               <Lock className="w-3.5 h-3.5" />
-              <span>Zero-Leakage (Age Unrevealed)</span>
+              <span>Zero-Leakage (Age Shielded & Verified)</span>
             </span>
           </div>
         </div>
