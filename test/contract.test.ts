@@ -101,4 +101,14 @@ describe('Midnight Network Compact Contract: Eligibility Gate Test Suite', () =>
       'Circuit Precondition Failed: Eligibility gate is paused'
     );
   });
+
+  it('Test 5: Edge Case - Rejects invalid witness with age out of human bounds (> 150 yrs)', async () => {
+    // 1. User passes invalid age witness (e.g. 250 years)
+    const invalidWitness = { age: 250 };
+
+    // 2. Compact circuit constraint must reject
+    await expect(client.verifyEligibility(invalidWitness)).rejects.toThrow(
+      'Circuit constraint violation: Age witness out of valid human bounds [0, 150]'
+    );
+  });
 });
