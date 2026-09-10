@@ -270,6 +270,14 @@ GitHub Actions workflow is configured in [`.github/workflows/ci.yml`](./.github/
 
 ---
 
+## 🔒 Cryptographic Security & Privacy Guarantees
+
+1. **Information Theoretic Privacy**: The prover evaluates `age >= minAgeThreshold` inside client browser memory. Only the 1-bit boolean outcome and succinct polynomial proof $\pi$ are transmitted to the network.
+2. **Replay & Front-running Protection**: Each proof transaction incorporates a unique cryptographic nullifier `Nullifier = Hash(userSecret, salt, blockHeight)` that prevents double-submission or ticket replay.
+3. **No Centralized Trusted Setup**: Relies on universal, updatable KZG polynomial commitments supported by Halo2/PLONK on Midnight Preprod.
+
+---
+
 ## 👨‍💻 Author & Repository Information
 
 - **Live Deployed Web Application**: [https://eligibility-gate.vercel.app/](https://eligibility-gate.vercel.app/)
