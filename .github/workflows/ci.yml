@@ -1,0 +1,36 @@
+name: Midnight CI/CD Pipeline
+
+on:
+  push:
+    branches: [ main, master, develop ]
+  pull_request:
+    branches: [ main, master ]
+
+jobs:
+  build-and-test:
+    name: Build, Compile Compact Circuit & Test
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js Runtime
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: 'npm'
+
+      - name: Install Project Dependencies
+        run: npm ci
+
+      - name: Compile Compact Smart Contract & Generate Circuits
+        run: npm run compile:contract
+
+      - name: Run Midnight Zero-Knowledge Contract Test Suite
+        run: npm run test
+
+      - name: Build Production Web Application
+        run: npm run build
+        env:
+          NEXT_PUBLIC_MIDNIGHT_NETWORK: 'preprod'
