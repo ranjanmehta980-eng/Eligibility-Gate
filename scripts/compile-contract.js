@@ -94,5 +94,6 @@ const bindingsTsPath = path.join(MANAGED_DIR, 'contract.ts');
 fs.writeFileSync(bindingsPath, contractBindings);
 fs.writeFileSync(bindingsTsPath, contractBindings);
 
+console.log(`📦 Generated Circuits: verifyEligibility, setMinAgeThreshold, setGateActive`);
 console.log(`✅ [Midnight Compiler] Successfully generated artifacts in: ${MANAGED_DIR}`);
 console.log('✨ Compact compilation complete.');
