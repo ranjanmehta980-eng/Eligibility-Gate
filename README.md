@@ -3,7 +3,8 @@
 > **Midnight Network Hackathon — Level-3 Project Submission**  
 > **Concept**: Verifiable Private Access / Age & Eligibility Gate  
 > **Smart Contract Language**: Compact DSL | **Zero-Knowledge Proofs**: Halo2 / PLONK | **Frontend**: Next.js 14, React 18, Tailwind CSS, Lucide Icons  
-> **Live Web Application**: [https://eligibility-gate.vercel.app/](https://eligibility-gate.vercel.app/)
+> **Live Web Application**: [https://eligibility-gate.vercel.app/](https://eligibility-gate.vercel.app/)  
+> [![Midnight CI/CD Pipeline](https://github.com/ranjanmehta980-eng/Eligibility-Gate/actions/workflows/ci.yml/badge.svg)](https://github.com/ranjanmehta980-eng/Eligibility-Gate/actions)
 
 ---
 
