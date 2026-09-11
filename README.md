@@ -2,7 +2,8 @@
 
 > **Midnight Network Hackathon — Level-3 Project Submission**  
 > **Concept**: Verifiable Private Access / Age & Eligibility Gate  
-> **Smart Contract Language**: Compact DSL | **Zero-Knowledge Proofs**: Halo2 / PLONK | **Frontend**: Next.js 14, React 18, Tailwind CSS, Lucide Icons
+> **Smart Contract Language**: Compact DSL | **Zero-Knowledge Proofs**: Halo2 / PLONK | **Frontend**: Next.js 14, React 18, Tailwind CSS, Lucide Icons  
+> **Live Web Application**: [https://eligibility-gate.vercel.app/](https://eligibility-gate.vercel.app/)
 
 ---
 
@@ -20,13 +21,15 @@
 | **8. Automated Unit/Integration Tests** | ✅ 4/4 Passed | [`test/contract.test.ts`](./test/contract.test.ts) (`npm run test`) |
 | **9. GitHub Actions CI/CD Pipeline** | ✅ Complete | [`.github/workflows/ci.yml`](./.github/workflows/ci.yml) |
 | **10. Privacy Model & Level-3 Proposal** | ✅ Complete | Documented in full below |
-| **11. Video Demonstration** | ✅ Available | [Watch Live Video Demo](https://photos.app.goo.gl/y2ddbuJGfGgdJ45m6) |
+| **11. Live Deployed Web App** | ✅ Online | [https://eligibility-gate.vercel.app/](https://eligibility-gate.vercel.app/) |
+| **12. Video Demonstration** | ✅ Available | [Watch Live Video Demo](https://photos.app.goo.gl/y2ddbuJGfGgdJ45m6) |
 
 ---
 
-## 📹 Live Demonstration Video
+## 🚀 Live Demo & Video Walkthrough
 
-- **Video Walkthrough**: [https://photos.app.goo.gl/y2ddbuJGfGgdJ45m6](https://photos.app.goo.gl/y2ddbuJGfGgdJ45m6)  
+- **Live Deployed Web Application**: [https://eligibility-gate.vercel.app/](https://eligibility-gate.vercel.app/)
+- **Video Demonstration**: [https://photos.app.goo.gl/y2ddbuJGfGgdJ45m6](https://photos.app.goo.gl/y2ddbuJGfGgdJ45m6)  
   *Watch a comprehensive end-to-end demonstration of client-side Zero-Knowledge proof generation, Lace wallet connectivity, on-chain state transitions, and real-time privacy verification.*
 
 ---
@@ -268,6 +271,7 @@ GitHub Actions workflow is configured in [`.github/workflows/ci.yml`](./.github/
 
 ## 👨‍💻 Author & Repository Information
 
+- **Live Deployed Web Application**: [https://eligibility-gate.vercel.app/](https://eligibility-gate.vercel.app/)
 - **Repository**: [https://github.com/ranjanmehta980-eng/Eligibility-Gate](https://github.com/ranjanmehta980-eng/Eligibility-Gate)
 - **Live Demo Video**: [https://photos.app.goo.gl/y2ddbuJGfGgdJ45m6](https://photos.app.goo.gl/y2ddbuJGfGgdJ45m6)
 - **GitHub Profile**: [@ranjanmehta980-eng](https://github.com/ranjanmehta980-eng)
