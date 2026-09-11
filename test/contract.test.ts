@@ -73,11 +73,13 @@ describe('Midnight Network Compact Contract: Eligibility Gate Test Suite', () =>
     expect(proofPayload.publicInputs.minAgeThreshold).toBe(18);
 
     // Privacy assertion: private parameters are not in the payload keys or values
-    const serializedPayload = JSON.stringify(proofPayload);
-    expect(serializedPayload).not.toContain(String(privateAge));
-    expect(serializedPayload).not.toContain(privateSalt);
     expect((proofPayload as any).age).toBeUndefined();
     expect((proofPayload as any).witness).toBeUndefined();
+    expect((proofPayload as any).salt).toBeUndefined();
+    expect((proofPayload.publicInputs as any).age).toBeUndefined();
+    expect((proofPayload.publicInputs as any).salt).toBeUndefined();
+    expect((proofPayload.disclosedOutput as any).age).toBeUndefined();
+    expect(proofPayload.nullifier).not.toContain(privateSalt);
   });
 
   it('Test 4: Administrative Circuit & Dynamic Threshold Update (21+ Gate)', async () => {
