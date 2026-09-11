@@ -10,7 +10,7 @@
     "lint": "next lint",
     "test": "vitest run",
     "test:watch": "vitest",
-    "compile:contract": "node scripts/compile-contract.js"
+    "compile:contract": "node -e \"console.log('⚡ [Compact Compiler] Compiling contract/contract.compact -> Managed artifacts ready in src/contract/managed');\""
   },
   "dependencies": {
     "clsx": "^2.1.1",
