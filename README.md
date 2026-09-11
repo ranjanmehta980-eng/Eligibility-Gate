@@ -243,6 +243,8 @@ Open [http://localhost:3000](http://localhost:3000) in your browser.
 
 ## 🧪 Test Suite Coverage (100% Passing)
 
+![Zero-Knowledge Test Suite Results](./image.png)
+
 The test suite in [`test/contract.test.ts`](./test/contract.test.ts) verifies all core circuits and privacy guarantees:
 1. **Eligible Age Witness Verification**: Confirms `age >= threshold` passes, returns `isEligible === true`, and increments ledger counter.
 2. **Ineligible Age Witness Handling**: Confirms `age < threshold` fails cleanly without exposing private values on-chain.
@@ -252,6 +254,8 @@ The test suite in [`test/contract.test.ts`](./test/contract.test.ts) verifies al
 ---
 
 ## 📦 CI/CD Automation
+
+![GitHub Actions CI/CD Pipeline Execution](./image-1.png)
 
 GitHub Actions workflow is configured in [`.github/workflows/ci.yml`](./.github/workflows/ci.yml) to automatically:
 1. Check out code and setup Node.js runtime.
