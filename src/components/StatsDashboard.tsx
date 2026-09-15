@@ -42,7 +42,7 @@ export const StatsDashboard: React.FC = () => {
     try {
       setIsUpdating(true);
       await EligibilityGateClient.getInstance().setMinAgeThreshold(newThresholdInput);
-      setAdminSuccessMsg(`Threshold successfully updated to ${newThresholdInput} years on-chain!`);
+      setAdminSuccessMsg(`Threshold updated to ${newThresholdInput} years on-chain!`);
       setTimeout(() => setAdminSuccessMsg(null), 3000);
     } catch (e: any) {
       console.error(e);
@@ -66,23 +66,64 @@ export const StatsDashboard: React.FC = () => {
     EligibilityGateClient.getInstance().resetToDefaults();
   };
 
+  const statCards = [
+    {
+      label: 'Total Proofs Verified',
+      value: state?.totalVerifications || 0,
+      suffix: '',
+      icon: Users,
+      color: 'purple',
+      detail: 'On-chain counter increments',
+      detailColor: 'text-emerald-400/60',
+    },
+    {
+      label: 'Min Age Threshold',
+      value: state?.minAgeThreshold || 18,
+      suffix: ' yrs',
+      icon: ShieldCheck,
+      color: 'cyan',
+      detail: 'Configurable via Compact circuit',
+      detailColor: 'text-purple-300/40',
+    },
+    {
+      label: 'Gate Status',
+      value: state?.gateActive ? 'LIVE' : 'PAUSED',
+      suffix: '',
+      icon: Activity,
+      color: state?.gateActive ? 'emerald' : 'rose',
+      detail: 'Midnight Preprod Consensus',
+      detailColor: 'text-purple-300/40',
+    },
+    {
+      label: 'Privacy Leakage',
+      value: '0',
+      suffix: ' Bits',
+      icon: Lock,
+      color: 'emerald',
+      detail: '100% Zero-Knowledge Witness',
+      detailColor: 'text-emerald-400/60',
+    },
+  ];
+
   return (
     <div className="w-full space-y-6">
       
-      {/* Contract Identification Banner */}
-      <div className="glass-panel p-4 rounded-2xl border border-purple-500/30 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 bg-midnight-900/60">
+      {/* Contract ID Banner */}
+      <div className="glass-panel p-4 rounded-2xl flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 relative overflow-hidden">
+        <div className="absolute top-0 left-0 right-0 h-[2px] bg-gradient-to-r from-transparent via-purple-500 to-transparent" />
+        
         <div className="flex items-center space-x-3">
-          <div className="w-9 h-9 rounded-xl bg-purple-600/30 border border-purple-500/40 flex items-center justify-center text-purple-300">
+          <div className="w-10 h-10 rounded-xl bg-gradient-to-tr from-purple-600/20 to-pink-600/20 border border-purple-500/15 flex items-center justify-center text-purple-300">
             <Database className="w-5 h-5" />
           </div>
           <div>
             <div className="flex items-center space-x-2">
-              <span className="text-xs font-semibold text-purple-200">Midnight Preprod Contract ID:</span>
-              <span className="px-2 py-0.5 rounded text-[10px] font-mono bg-emerald-950/80 border border-emerald-500/40 text-emerald-400 font-bold">
-                DEPLOYED & ACTIVE
+              <span className="text-xs font-semibold text-purple-200/70">Midnight Preprod Contract:</span>
+              <span className="px-2 py-0.5 rounded-full text-[10px] font-mono bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 font-bold">
+                DEPLOYED
               </span>
             </div>
-            <p className="font-mono text-xs text-cyan-300 font-semibold select-all mt-0.5">
+            <p className="font-mono text-xs text-cyan-300/70 font-medium select-all mt-0.5">
               {state?.contractAddress || 'mn_contract_eligibility_gate_0x8f2a1b9'}
             </p>
           </div>
@@ -91,140 +132,107 @@ export const StatsDashboard: React.FC = () => {
           onClick={() => {
             if (state?.contractAddress) {
               navigator.clipboard.writeText(state.contractAddress);
-              setAdminSuccessMsg('Contract ID copied to clipboard!');
+              setAdminSuccessMsg('Contract ID copied!');
               setTimeout(() => setAdminSuccessMsg(null), 2500);
             }
           }}
-          className="px-3 py-1.5 rounded-lg bg-purple-950/60 border border-purple-500/40 hover:bg-purple-900/50 text-purple-300 text-xs font-medium transition-all"
+          className="px-4 py-2 rounded-xl bg-midnight-900/60 border border-purple-500/15 hover:border-purple-400/30 text-purple-300 text-xs font-medium transition-all"
         >
-          Copy Contract ID
+          Copy ID
         </button>
       </div>
 
-      {/* Top Stats Cards */}
+      {/* Stats Cards Grid */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-        
-        <div className="glass-panel p-5 rounded-2xl border-purple-900/40 relative overflow-hidden">
-          <div className="flex items-center justify-between">
-            <span className="text-xs font-medium text-purple-300/70">Total Proofs Verified</span>
-            <div className="w-8 h-8 rounded-lg bg-purple-950/60 border border-purple-500/30 flex items-center justify-center text-purple-400">
-              <Users className="w-4 h-4" />
-            </div>
-          </div>
-          <p className="text-2xl font-bold font-mono text-white mt-2">
-            {state?.totalVerifications || 0}
-          </p>
-          <p className="text-[11px] text-emerald-400 mt-1 flex items-center space-x-1">
-            <CheckCircle2 className="w-3 h-3" />
-            <span>On-chain counter increments</span>
-          </p>
-        </div>
+        {statCards.map((card, idx) => {
+          const Icon = card.icon;
+          const iconColor = card.color === 'purple' ? 'from-purple-500/15 to-purple-600/15 text-purple-400 border-purple-500/15' :
+            card.color === 'cyan' ? 'from-cyan-500/15 to-cyan-600/15 text-cyan-400 border-cyan-500/15' :
+            card.color === 'emerald' ? 'from-emerald-500/15 to-emerald-600/15 text-emerald-400 border-emerald-500/15' :
+            'from-rose-500/15 to-rose-600/15 text-rose-400 border-rose-500/15';
+          const valueColor = card.color === 'emerald' ? 'text-emerald-400' :
+            card.color === 'cyan' ? 'text-cyan-400' :
+            card.color === 'rose' ? 'text-rose-400' : '';
 
-        <div className="glass-panel p-5 rounded-2xl border-purple-900/40 relative overflow-hidden">
-          <div className="flex items-center justify-between">
-            <span className="text-xs font-medium text-purple-300/70">Min Age Threshold</span>
-            <div className="w-8 h-8 rounded-lg bg-cyan-950/60 border border-cyan-500/30 flex items-center justify-center text-cyan-400">
-              <ShieldCheck className="w-4 h-4" />
-            </div>
-          </div>
-          <p className="text-2xl font-bold font-mono text-cyan-400 mt-2">
-            {state?.minAgeThreshold || 18} <span className="text-sm font-normal text-purple-300">years</span>
-          </p>
-          <p className="text-[11px] text-purple-300/60 mt-1">Configurable via Compact circuit</p>
-        </div>
-
-        <div className="glass-panel p-5 rounded-2xl border-purple-900/40 relative overflow-hidden">
-          <div className="flex items-center justify-between">
-            <span className="text-xs font-medium text-purple-300/70">Gate Status</span>
-            <div className={`w-8 h-8 rounded-lg flex items-center justify-center border ${
-              state?.gateActive 
-                ? 'bg-emerald-950/60 border-emerald-500/30 text-emerald-400'
-                : 'bg-rose-950/60 border-rose-500/30 text-rose-400'
-            }`}>
-              <Activity className="w-4 h-4" />
-            </div>
-          </div>
-          <p className="text-2xl font-bold font-mono text-white mt-2">
-            {state?.gateActive ? (
-              <span className="text-emerald-400">OPERATIONAL</span>
-            ) : (
-              <span className="text-rose-400">PAUSED</span>
-            )}
-          </p>
-          <p className="text-[11px] text-purple-300/60 mt-1">Midnight Preprod Consensus</p>
-        </div>
-
-        <div className="glass-panel p-5 rounded-2xl border-purple-900/40 relative overflow-hidden">
-          <div className="flex items-center justify-between">
-            <span className="text-xs font-medium text-purple-300/70">Privacy Leakage Metric</span>
-            <div className="w-8 h-8 rounded-lg bg-emerald-950/60 border border-emerald-500/30 flex items-center justify-center text-emerald-400">
-              <Lock className="w-4 h-4" />
-            </div>
-          </div>
-          <p className="text-2xl font-bold font-mono text-emerald-400 mt-2">
-            0 Bits
-          </p>
-          <p className="text-[11px] text-emerald-400/80 mt-1">100% Zero-Knowledge Witness</p>
-        </div>
-
-      </div>
-
-      {/* Main Row: Recent Anonymous Stream & Admin Controls */}
-      <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
-        
-        {/* Left: Recent Anonymous Verifications Stream */}
-        <div className="lg:col-span-8 glass-panel rounded-2xl p-6 space-y-4">
-          <div className="flex items-center justify-between border-b border-purple-900/30 pb-4">
-            <div>
-              <h3 className="text-lg font-bold text-white flex items-center space-x-2">
-                <Database className="w-5 h-5 text-purple-400" />
-                <span>On-Chain Anonymous Verification Stream</span>
-              </h3>
-              <p className="text-xs text-purple-300/60 mt-0.5">
-                Real-time Zero-Knowledge proof settlements recorded on Midnight testnet
+          return (
+            <div key={idx} className="glass-panel card-hover-lift p-5 rounded-2xl relative overflow-hidden">
+              <div className="flex items-center justify-between">
+                <span className="text-xs font-medium text-purple-300/50">{card.label}</span>
+                <div className={`w-9 h-9 rounded-xl bg-gradient-to-tr ${iconColor} border flex items-center justify-center`}>
+                  <Icon className="w-4 h-4" />
+                </div>
+              </div>
+              <p className={`text-2xl font-display font-bold font-mono mt-2 ${valueColor || 'text-white'}`}>
+                {card.value}{card.suffix}
+              </p>
+              <p className={`text-[11px] mt-1.5 flex items-center space-x-1 ${card.detailColor}`}>
+                {card.color === 'emerald' && card.label !== 'Gate Status' && <CheckCircle2 className="w-3 h-3" />}
+                <span>{card.detail}</span>
               </p>
             </div>
-            <div className="flex items-center space-x-2">
-              <span className="px-2.5 py-1 rounded-md text-[11px] font-mono badge-public">
-                PREPROD FEED
-              </span>
+          );
+        })}
+      </div>
+
+      {/* Main Row: Stream & Admin */}
+      <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
+        
+        {/* Verification Stream */}
+        <div className="lg:col-span-8 glass-panel rounded-2xl p-6 space-y-4">
+          <div className="flex items-center justify-between border-b border-purple-900/15 pb-4">
+            <div>
+              <h3 className="text-lg font-display font-bold text-white flex items-center space-x-2">
+                <Database className="w-5 h-5 text-purple-400/70" />
+                <span>Anonymous Verification Stream</span>
+              </h3>
+              <p className="text-xs text-purple-300/40 mt-0.5">
+                Zero-Knowledge proof settlements on Midnight testnet
+              </p>
             </div>
+            <span className="px-3 py-1 rounded-full text-[10px] font-mono font-semibold badge-public tracking-wider">
+              LIVE FEED
+            </span>
           </div>
 
           <div className="space-y-3">
             {logs.length === 0 ? (
-              <p className="text-xs text-purple-400/60 text-center py-6">No verifications recorded yet.</p>
+              <div className="text-center py-12">
+                <div className="w-12 h-12 rounded-full bg-purple-500/10 mx-auto flex items-center justify-center mb-3">
+                  <Database className="w-5 h-5 text-purple-400/40" />
+                </div>
+                <p className="text-xs text-purple-400/40">No verifications recorded yet.</p>
+              </div>
             ) : (
               logs.map((log) => (
                 <div
                   key={log.id}
-                  className="p-3.5 rounded-xl bg-midnight-950/80 border border-purple-900/40 hover:border-purple-600/50 transition-all font-mono text-xs space-y-2"
+                  className="p-4 rounded-xl bg-midnight-950/50 border border-purple-900/10 hover:border-purple-500/15 transition-all font-mono text-xs space-y-2 card-hover-lift"
                 >
                   <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-1">
                     <div className="flex items-center space-x-2">
-                      <span className={`px-2 py-0.5 rounded text-[10px] font-bold ${
-                        log.isEligible ? 'badge-private' : 'bg-rose-950/60 text-rose-400 border border-rose-500/30'
+                      <span className={`px-2.5 py-0.5 rounded-full text-[10px] font-bold ${
+                        log.isEligible ? 'badge-private' : 'bg-rose-950/30 text-rose-400 border border-rose-500/20'
                       }`}>
-                        {log.isEligible ? 'VERIFIED ELIGIBLE' : 'INELIGIBLE'}
+                        {log.isEligible ? 'ELIGIBLE' : 'INELIGIBLE'}
                       </span>
-                      <span className="text-[11px] text-purple-300">
+                      <span className="text-[11px] text-purple-300/50">
                         Threshold &gt;= {log.minAgeRequired} yrs
                       </span>
                     </div>
-                    <div className="flex items-center space-x-2 text-[10px] text-purple-400/60">
+                    <div className="flex items-center space-x-2 text-[10px] text-purple-400/40">
                       <Clock className="w-3 h-3" />
                       <span>{new Date(log.timestamp).toLocaleTimeString()}</span>
-                      <span>•</span>
+                      <span className="text-purple-500/20">•</span>
                       <span>Block #{log.blockHeight}</span>
                     </div>
                   </div>
 
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-2 text-[11px] text-purple-300/80 bg-midnight-900/60 p-2 rounded-lg border border-purple-950">
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-2 text-[11px] text-purple-300/50 bg-midnight-900/40 p-2.5 rounded-lg border border-purple-950/50">
                     <div className="truncate">
-                      <span className="text-purple-400">Tx:</span> {log.txHash}
+                      <span className="text-purple-400/40">Tx:</span> {log.txHash}
                     </div>
                     <div className="truncate">
-                      <span className="text-purple-400">Nullifier:</span> {log.anonymizedNullifier}
+                      <span className="text-purple-400/40">Nullifier:</span> {log.anonymizedNullifier}
                     </div>
                   </div>
                 </div>
@@ -233,23 +241,23 @@ export const StatsDashboard: React.FC = () => {
           </div>
         </div>
 
-        {/* Right: Contract Admin Governance Panel */}
+        {/* Admin Governance Panel */}
         <div className="lg:col-span-4 glass-panel rounded-2xl p-6 space-y-6 flex flex-col justify-between">
-          <div className="space-y-4">
-            <div className="flex items-center justify-between border-b border-purple-900/30 pb-4">
-              <h3 className="text-lg font-bold text-white flex items-center space-x-2">
-                <Sliders className="w-5 h-5 text-purple-400" />
-                <span>Admin Governance</span>
+          <div className="space-y-5">
+            <div className="flex items-center justify-between border-b border-purple-900/15 pb-4">
+              <h3 className="text-lg font-display font-bold text-white flex items-center space-x-2">
+                <Sliders className="w-5 h-5 text-purple-400/70" />
+                <span>Admin Panel</span>
               </h3>
-              <span className="px-2 py-0.5 rounded text-[10px] font-mono badge-zk">
+              <span className="px-2.5 py-0.5 rounded-full text-[10px] font-mono badge-zk">
                 CIRCUITS
               </span>
             </div>
 
-            {/* Adjust Threshold Form */}
-            <div className="space-y-2">
-              <label className="text-xs font-semibold text-purple-200">
-                Update Gate Threshold (`setMinAgeThreshold`)
+            {/* Threshold Control */}
+            <div className="space-y-2.5">
+              <label className="text-xs font-semibold text-purple-200/70">
+                Update Gate Threshold
               </label>
               <div className="flex space-x-2">
                 <input
@@ -258,39 +266,39 @@ export const StatsDashboard: React.FC = () => {
                   max="99"
                   value={newThresholdInput}
                   onChange={(e) => setNewThresholdInput(parseInt(e.target.value) || 18)}
-                  className="w-24 glass-input px-3 py-1.5 rounded-lg text-sm font-mono text-center"
+                  className="w-24 glass-input px-3 py-2 text-sm font-mono text-center"
                 />
                 <button
                   onClick={handleUpdateThreshold}
                   disabled={isUpdating}
-                  className="flex-1 py-1.5 px-3 rounded-lg bg-purple-600 hover:bg-purple-500 text-white text-xs font-bold transition-all disabled:opacity-50"
+                  className="flex-1 py-2 px-3 rounded-xl glow-btn text-white text-xs font-bold disabled:opacity-50"
                 >
                   {isUpdating ? 'Updating...' : 'Set Threshold'}
                 </button>
               </div>
-              <p className="text-[10px] text-purple-400/60">
+              <p className="text-[10px] text-purple-400/35">
                 Calls the Compact admin circuit to update ledger threshold.
               </p>
             </div>
 
             {adminSuccessMsg && (
-              <div className="p-2.5 rounded-lg bg-emerald-950/40 border border-emerald-500/40 text-emerald-300 text-xs">
+              <div className="p-3 rounded-xl bg-emerald-950/15 border border-emerald-500/20 text-emerald-300 text-xs">
                 {adminSuccessMsg}
               </div>
             )}
 
-            {/* Toggle Gate Active */}
-            <div className="pt-2 border-t border-purple-900/30 space-y-2">
-              <label className="text-xs font-semibold text-purple-200">
+            {/* Toggle Gate */}
+            <div className="pt-3 border-t border-purple-900/15 space-y-2.5">
+              <label className="text-xs font-semibold text-purple-200/70">
                 Emergency Pause / Resume
               </label>
               <button
                 onClick={handleToggleGate}
                 disabled={isUpdating}
-                className={`w-full py-2 px-4 rounded-xl font-bold text-xs flex items-center justify-center space-x-2 border transition-all ${
+                className={`w-full py-2.5 px-4 rounded-xl font-bold text-xs flex items-center justify-center space-x-2 border transition-all ${
                   state?.gateActive
-                    ? 'bg-rose-950/40 hover:bg-rose-950/60 border-rose-500/40 text-rose-300'
-                    : 'bg-emerald-950/40 hover:bg-emerald-950/60 border-emerald-500/40 text-emerald-300'
+                    ? 'bg-rose-950/20 hover:bg-rose-950/30 border-rose-500/20 text-rose-300'
+                    : 'bg-emerald-950/20 hover:bg-emerald-950/30 border-emerald-500/20 text-emerald-300'
                 }`}
               >
                 {state?.gateActive ? (
@@ -308,14 +316,14 @@ export const StatsDashboard: React.FC = () => {
             </div>
           </div>
 
-          {/* Reset Demo Button */}
-          <div className="pt-4 border-t border-purple-900/30">
+          {/* Reset */}
+          <div className="pt-4 border-t border-purple-900/15">
             <button
               onClick={handleResetDemo}
-              className="w-full py-2 px-3 rounded-lg bg-midnight-950/80 border border-purple-900/40 hover:border-purple-700 text-purple-400 hover:text-purple-200 text-xs font-medium flex items-center justify-center space-x-2 transition-all"
+              className="w-full py-2.5 px-3 rounded-xl bg-midnight-950/50 border border-purple-900/10 hover:border-purple-700/20 text-purple-400/60 hover:text-purple-200 text-xs font-medium flex items-center justify-center space-x-2 transition-all"
             >
               <RefreshCw className="w-3.5 h-3.5" />
-              <span>Reset State & Logs to Demo Defaults</span>
+              <span>Reset to Demo Defaults</span>
             </button>
           </div>
 
