@@ -30,6 +30,3 @@ yarn-error.log*
 *.tsbuildinfo
 next-env.d.ts
 
-# scripts and temporary utilities
-/scripts/
-
