@@ -280,7 +280,7 @@ GitHub Actions workflow is configured in [`.github/workflows/ci.yml`](./.github/
 ---
 
 ## 👨‍💻 Author & Repository Information
-
+- **Product Twitter  Handle ** : [https://x.com/EligibilityGat](https://x.com/EligibilityGat)
 - **Live Deployed Web Application**: [https://eligibility-gate.vercel.app/](https://eligibility-gate.vercel.app/)
 - **Midnight Preprod On-Chain Contract**: [`c634cc887df0973ba82bc12e8eec22a7e4b7fc3cbce230cd84cc57b01183cf48`](https://preprod.midnight.network/contract/c634cc887df0973ba82bc12e8eec22a7e4b7fc3cbce230cd84cc57b01183cf48)
 - **Midnight Preprod Explorer**: [View Deployed Contract on Midnight Explorer](https://preprod.midnight.network/contract/c634cc887df0973ba82bc12e8eec22a7e4b7fc3cbce230cd84cc57b01183cf48)
