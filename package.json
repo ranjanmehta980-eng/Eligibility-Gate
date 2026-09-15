@@ -10,7 +10,7 @@
     "lint": "next lint",
     "test": "vitest run",
     "test:watch": "vitest",
-    "compile:contract": "node -e \"console.log('⚡ [Compact Compiler] Compiling contract/contract.compact -> Managed artifacts ready in src/contract/managed');\""
+    "compile:contract": "node scripts/compile-contract.mjs"
   },
   "dependencies": {
     "@scure/bip39": "^2.4.0",

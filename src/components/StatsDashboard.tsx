@@ -124,7 +124,7 @@ export const StatsDashboard: React.FC = () => {
               </span>
             </div>
             <p className="font-mono text-xs text-cyan-300/70 font-medium select-all mt-0.5">
-              {state?.contractAddress || 'mn_contract_eligibility_gate_0x8f2a1b9'}
+              {state?.contractAddress || 'c634cc887df0973ba82bc12e8eec22a7e4b7fc3cbce230cd84cc57b01183cf48'}
             </p>
           </div>
         </div>

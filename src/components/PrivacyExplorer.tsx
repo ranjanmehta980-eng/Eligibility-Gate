@@ -17,7 +17,7 @@ export const PrivacyExplorer: React.FC = () => {
   };
 
   const sampleLedgerTransaction = {
-    contractAddress: "mn_contract_eligibility_gate_0x8f2a1b9",
+    contractAddress: "c634cc887df0973ba82bc12e8eec22a7e4b7fc3cbce230cd84cc57b01183cf48",
     circuit: "verifyEligibility",
     proofType: "Halo2-PLONK-KZG",
     disclosedOutputs: {
@@ -207,7 +207,7 @@ export const PrivacyExplorer: React.FC = () => {
 {`// Midnight State Delta Specification
 {
   "blockHeight": 482914,
-  "contract": "mn_contract_eligibility_gate_0x8f2a1b9",
+  "contract": "c634cc887df0973ba82bc12e8eec22a7e4b7fc3cbce230cd84cc57b01183cf48",
   "circuitExecuted": "verifyEligibility",
   "disclosures": {
     "isEligible": true

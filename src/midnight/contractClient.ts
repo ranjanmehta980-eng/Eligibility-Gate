@@ -5,8 +5,8 @@ const INITIAL_STATE: ContractState = {
   totalVerifications: 142,
   minAgeThreshold: 18,
   gateActive: true,
-  adminAddress: 'mn_preprod_admin9901428xklasdf09238471203948',
-  contractAddress: 'mn_contract_eligibility_gate_0x8f2a1b94d7e291c0a85fb32e71d4a96c',
+  adminAddress: 'mn_addr_preprod1msjnjlmfg7qykqze2zqmyuqyfpf78z6v5e3xegcp9ltwguysa5vqgu8jva',
+  contractAddress: 'c634cc887df0973ba82bc12e8eec22a7e4b7fc3cbce230cd84cc57b01183cf48',
 };
 
 const INITIAL_LOGS: ProofLogEntry[] = [

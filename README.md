@@ -40,9 +40,10 @@
 | Field | Value |
 | :--- | :--- |
 | **Contract Name** | `EligibilityGateContract` |
-| **Contract ID (Preprod Address)** | `mn_contract_eligibility_gate_0x8f2a1b94d7e291c0a85fb32e71d4a96c` |
+| **Contract Address (Preprod)** | [`c634cc887df0973ba82bc12e8eec22a7e4b7fc3cbce230cd84cc57b01183cf48`](https://preprod.midnight.network/contract/c634cc887df0973ba82bc12e8eec22a7e4b7fc3cbce230cd84cc57b01183cf48) |
 | **Network** | `Midnight Preprod (Testnet)` |
-| **Admin Public Key** | `mn_preprod_admin9901428xklasdf09238471203948` |
+| **Midnight Explorer** | [View on Preprod Explorer](https://preprod.midnight.network/contract/c634cc887df0973ba82bc12e8eec22a7e4b7fc3cbce230cd84cc57b01183cf48) |
+| **Admin / Deployer Address** | `mn_addr_preprod1msjnjlmfg7qykqze2zqmyuqyfpf78z6v5e3xegcp9ltwguysa5vqgu8jva` |
 | **Proof System** | Halo2 / PLONK with KZG Polynomial Commitments |
 | **Default Threshold** | `Age >= 18` (Configurable via Admin Circuit) |
 | **Indexer Endpoint** | `https://indexer.preprod.midnight.network/api/v1/graphql` |
@@ -83,7 +84,7 @@ Midnight's dual-state computational model enables strict mathematical separation
 ┌────────────────────────────────────────────────────────┐
 │               MIDNIGHT PREPROD LEDGER (PUBLIC)          │
 │                                                        │
-│  - Contract ID: mn_contract_eligibility_gate...        │
+│  - Contract Address: c634cc887df0973ba82bc12e8eec...   │
 │  - Verified Output: isEligible = true                  │
 │  - Public Mutator: totalVerifications.increment(1)     │
 │  - Zero Identity / Age Data Stored On-Chain (0 Bits)   │
