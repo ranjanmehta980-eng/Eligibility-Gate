@@ -17,6 +17,9 @@
     "typecheck": "tsc -p tsconfig.json --noEmit",
     "test": "vitest run"
   },
+  "dependencies": {
+    "@scure/bip39": "^2.2.0"
+  },
   "devDependencies": {
     "@types/json-schema": "^7.0.15",
     "@types/node": "^25.3.0",

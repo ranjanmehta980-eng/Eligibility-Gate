@@ -38,6 +38,8 @@ import {
   createKeystore,
   NoOpTransactionHistoryStorage,
 } from '@midnight-ntwrk/wallet-sdk';
+import { mnemonicToEntropy } from '@scure/bip39';
+import { wordlist } from '@scure/bip39/wordlists/english.js';
 
 type UnshieldedKeystore = {
   getPublicKey(): unknown;
@@ -138,7 +140,16 @@ export class MidnightWalletProvider implements MidnightProvider, WalletProvider 
       },
     };
 
-    const seeds = seed ? WalletSeeds.fromMasterSeed(seed) : WalletSeeds.generateRandom();
+    let resolvedSeed = seed ? seed.trim() : undefined;
+    if (resolvedSeed && resolvedSeed.includes(' ')) {
+      try {
+        const entropy = mnemonicToEntropy(resolvedSeed, wordlist);
+        resolvedSeed = Buffer.from(entropy).toString('hex');
+      } catch (err: any) {
+        logger.warn(`Could not parse mnemonic as BIP39 entropy: ${err.message}`);
+      }
+    }
+    const seeds = resolvedSeed ? WalletSeeds.fromMasterSeed(resolvedSeed) : WalletSeeds.generateRandom();
     const keystore = createKeystore(seeds.unshielded, env.walletNetworkId as any);
 
     const unshieldedWallet = WalletFactory.createUnshieldedWallet(walletConfig as any, keystore);
