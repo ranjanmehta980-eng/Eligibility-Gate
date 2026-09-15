@@ -281,6 +281,8 @@ GitHub Actions workflow is configured in [`.github/workflows/ci.yml`](./.github/
 ## 👨‍💻 Author & Repository Information
 
 - **Live Deployed Web Application**: [https://eligibility-gate.vercel.app/](https://eligibility-gate.vercel.app/)
+- **Midnight Preprod On-Chain Contract**: [`c634cc887df0973ba82bc12e8eec22a7e4b7fc3cbce230cd84cc57b01183cf48`](https://preprod.midnight.network/contract/c634cc887df0973ba82bc12e8eec22a7e4b7fc3cbce230cd84cc57b01183cf48)
+- **Midnight Preprod Explorer**: [View Deployed Contract on Midnight Explorer](https://preprod.midnight.network/contract/c634cc887df0973ba82bc12e8eec22a7e4b7fc3cbce230cd84cc57b01183cf48)
 - **Repository**: [https://github.com/ranjanmehta980-eng/Eligibility-Gate](https://github.com/ranjanmehta980-eng/Eligibility-Gate)
 - **Live Demo Video**: [https://photos.app.goo.gl/y2ddbuJGfGgdJ45m6](https://photos.app.goo.gl/y2ddbuJGfGgdJ45m6)
 - **GitHub Profile**: [@ranjanmehta980-eng](https://github.com/ranjanmehta980-eng)
