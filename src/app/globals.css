@@ -16,7 +16,11 @@
 
 body {
   color: var(--foreground);
-  background-color: var(--background);
+  background-image: url('/dark_cosmic_zk_background.webp');
+  background-size: cover;
+  background-attachment: fixed;
+  background-position: center;
+  background-color: #060311;
   font-family: 'Inter', system-ui, -apple-system, sans-serif;
   overflow-x: hidden;
   -webkit-font-smoothing: antialiased;
@@ -24,20 +28,22 @@ body {
 }
 
 /* ========================================
-   Glassmorphism Primitives (Refined)
+   Glassmorphism Cards
    ======================================== */
+.card,
 .glass-panel {
-  background: rgba(10, 11, 26, 0.55);
+  background: rgba(18, 16, 42, 0.8);
   backdrop-filter: blur(20px);
   -webkit-backdrop-filter: blur(20px);
-  border: 1px solid rgba(139, 92, 246, 0.12);
+  border: 1px solid rgba(168, 85, 247, 0.2);
   box-shadow: 0 4px 24px rgba(0, 0, 0, 0.4);
   transition: border-color 0.3s ease, box-shadow 0.3s ease, transform 0.3s ease;
 }
 
+.card:hover,
 .glass-panel:hover {
-  border-color: rgba(139, 92, 246, 0.22);
-  box-shadow: 0 8px 40px rgba(0, 0, 0, 0.5), 0 0 20px rgba(139, 92, 246, 0.06);
+  border-color: rgba(168, 85, 247, 0.4);
+  box-shadow: 0 8px 40px rgba(0, 0, 0, 0.5), 0 0 25px rgba(168, 85, 247, 0.15);
 }
 
 .glass-panel-glow {
