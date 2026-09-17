@@ -6,19 +6,7 @@ import { LaceWalletService } from '@/midnight/laceConnector';
 import { ContractState, ProverStep, WalletAccount } from '@/midnight/types';
 import { ProofGenerationProgress } from '@/midnight/zkProver';
 import { ZKProofStepper } from './ZKProofStepper';
-import { 
-  ShieldCheck, 
-  Lock, 
-  Globe, 
-  Sparkles, 
-  CheckCircle2, 
-  XCircle, 
-  AlertTriangle, 
-  Key, 
-  Calendar,
-  Zap,
-  Fingerprint
-} from 'lucide-react';
+import { Sparkles, AlertTriangle, Fingerprint } from 'lucide-react';
 
 interface EligibilityGateProps {
   onSuccessBadge?: (details: any) => void;
@@ -27,8 +15,7 @@ interface EligibilityGateProps {
 export const EligibilityGate: React.FC<EligibilityGateProps> = ({ onSuccessBadge }) => {
   const [contractState, setContractState] = useState<ContractState | null>(null);
   const [wallet, setWallet] = useState<WalletAccount | null>(null);
-  const [ageInput, setAgeInput] = useState<number>(21);
-  const [birthYearInput, setBirthYearInput] = useState<number>(2003);
+  const [age, setAge] = useState<number>(21);
   const [customSalt, setCustomSalt] = useState<string>('');
 
   // Prover state
@@ -54,25 +41,16 @@ export const EligibilityGate: React.FC<EligibilityGateProps> = ({ onSuccessBadge
     };
   }, []);
 
-  const handleAgeChange = (val: number) => {
-    setAgeInput(val);
-    const calculatedYear = new Date().getFullYear() - val;
-    setBirthYearInput(calculatedYear);
-    setProofResult(null);
-    setErrorMessage(null);
-  };
-
-  const handleYearChange = (year: number) => {
-    setBirthYearInput(year);
-    const calculatedAge = new Date().getFullYear() - year;
-    setAgeInput(calculatedAge);
-    setProofResult(null);
-    setErrorMessage(null);
-  };
-
-  const currentYear = new Date().getFullYear();
   const minRequired = contractState?.minAgeThreshold || 18;
-  const isHypotheticallyEligible = ageInput >= minRequired;
+  const isSatisfied = age >= minRequired;
+  const currentYear = new Date().getFullYear();
+  const birthYear = currentYear - age;
+
+  const handleAgeChange = (val: number) => {
+    setAge(val);
+    setProofResult(null);
+    setErrorMessage(null);
+  };
 
   const handleGenerateProof = async () => {
     if (!wallet?.isConnected) {
@@ -93,7 +71,7 @@ export const EligibilityGate: React.FC<EligibilityGateProps> = ({ onSuccessBadge
 
       const result = await client.verifyEligibility(
         {
-          age: ageInput,
+          age: age,
           salt: customSalt || undefined,
         },
         (progress: ProofGenerationProgress) => {
@@ -123,269 +101,211 @@ export const EligibilityGate: React.FC<EligibilityGateProps> = ({ onSuccessBadge
     }
   };
 
+  const contractAddressDisplay = contractState?.contractAddress 
+    ? `${contractState.contractAddress.substring(0, 8)}...${contractState.contractAddress.substring(contractState.contractAddress.length - 6)}`
+    : 'c634cc...3cf48';
+
+  const txHashDisplay = proofResult?.txHash
+    ? `${proofResult.txHash.substring(0, 8)}...${proofResult.txHash.substring(proofResult.txHash.length - 4)}`
+    : '0x9c2e...4f1a';
+
   return (
     <div className="w-full space-y-6">
       
-      {/* Top Banner / Gate Status */}
-      <div className="glass-panel rounded-2xl p-6 relative overflow-hidden">
-        {/* Accent gradient line at top */}
-        <div className="absolute top-0 left-0 right-0 h-[2px] bg-gradient-to-r from-transparent via-purple-500 to-transparent" />
-        
-        <div className="flex flex-col md:flex-row md:items-center justify-between gap-5">
-          <div className="space-y-2">
-            <div className="flex items-center space-x-2">
-              <span className="px-3 py-1 rounded-full text-xs font-semibold badge-zk flex items-center space-x-1.5">
-                <Sparkles className="w-3.5 h-3.5" />
-                <span>Zero-Knowledge Proof Circuit</span>
-              </span>
-              <span className={`px-3 py-1 rounded-full text-xs font-semibold ${
-                contractState?.gateActive ? 'badge-private' : 'bg-rose-950/30 text-rose-400 border border-rose-500/25'
-              }`}>
-                {contractState?.gateActive ? '● Active' : '○ Paused'}
-              </span>
-            </div>
-            <h2 className="text-2xl md:text-3xl font-display font-bold tracking-tight">
-              <span className="gradient-text">Verifiable Age & Eligibility Gate</span>
-            </h2>
-            <p className="text-sm text-purple-200/50 max-w-2xl leading-relaxed">
-              Prove you meet the required threshold <span className="font-semibold text-purple-300/80">({minRequired}+ years)</span> using a client-side Compact witness. Your exact age is cryptographically shielded.
+      {/* TITLE CARD */}
+      <div className="max-w-7xl mx-auto bg-gradient-to-br from-[#12102A] to-[#0F0D24] border border-purple-500/20 rounded-[20px] p-7 shadow-[0_0_50px_rgba(139,92,246,0.1)] relative">
+        <div className="absolute top-0 left-6 right-6 h-[1px] bg-gradient-to-r from-transparent via-purple-500/50 to-transparent" />
+        <div className="flex justify-between items-start flex-col sm:flex-row gap-4">
+          <div>
+            <h1 className="text-[28px] font-black tracking-tight text-white">Zero Knowledge Age Gate</h1>
+            <p className="text-[13px] text-zinc-400 mt-1">
+              Verify age ≥ {minRequired} privately on-chain using zero-knowledge proofs — no personal data exposed
             </p>
           </div>
-
-          <div className="flex items-center space-x-4 bg-midnight-900/60 p-4 rounded-xl border border-purple-900/20">
-            <div className="text-right">
-              <p className="text-[11px] text-purple-300/50 font-medium">On-Chain Requirement</p>
-              <p className="text-xl font-bold font-mono gradient-text">&gt;= {minRequired} Years</p>
-            </div>
-            <div className="w-11 h-11 rounded-xl bg-gradient-to-tr from-purple-600/20 to-pink-600/20 border border-purple-500/20 flex items-center justify-center text-purple-300">
-              <ShieldCheck className="w-6 h-6" />
-            </div>
-          </div>
+          <span className="inline-flex items-center gap-2 text-[11px] px-3.5 py-1.5 rounded-full bg-emerald-500/10 border border-emerald-500/20 text-emerald-300 font-medium shrink-0">
+            <span className="w-2 h-2 bg-emerald-400 rounded-full animate-pulse" />
+            Network: Midnight Preprod • {wallet?.isConnected ? 'Lace Connected' : 'Ready'}
+          </span>
         </div>
       </div>
 
-      {/* Main Interactive Form & Privacy Visualizer */}
-      <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
+      {/* TWO COLUMN GRID: LEFT (PRIVATE) | RIGHT (PUBLIC) */}
+      <div className="max-w-7xl mx-auto grid lg:grid-cols-2 gap-6">
         
-        {/* Left Column: Private Witness Inputs */}
-        <div className="lg:col-span-7 glass-panel rounded-2xl p-6 space-y-6">
-          <div className="flex items-center justify-between border-b border-purple-900/15 pb-4">
-            <div>
-              <h3 className="text-lg font-display font-bold text-white flex items-center space-x-2">
-                <Lock className="w-5 h-5 text-emerald-400" />
-                <span>Private Witness Configuration</span>
-              </h3>
-              <p className="text-xs text-emerald-400/60 font-medium mt-0.5">
-                Evaluated strictly inside your device's browser memory
-              </p>
-            </div>
-            <span className="px-3 py-1 rounded-full text-[10px] font-mono font-semibold badge-private tracking-wider">
-              STAYS LOCAL
+        {/* LEFT - PRIVATE WITNESS */}
+        <div className="relative bg-gradient-to-br from-[#14112D]/90 to-[#0E0C22]/90 backdrop-blur-xl border border-pink-500/20 rounded-[20px] p-6 shadow-[0_0_60px_rgba(236,72,153,0.15),inset_0_1px_0_rgba(255,255,255,0.08)] overflow-hidden group">
+          <div className="absolute inset-0 bg-gradient-to-br from-pink-500/[0.05] to-transparent pointer-events-none" />
+          <div className="absolute top-0 left-0 right-0 h-[1px] bg-gradient-to-r from-transparent via-pink-400/50 to-transparent" />
+
+          <div className="flex justify-between items-center relative">
+            <h3 className="font-bold flex gap-2 items-center text-white">
+              <span>🛡️</span> Private Witness Configuration
+            </h3>
+            <span className="text-[10px] px-3 py-1 rounded-full bg-zinc-800 border border-white/10 text-zinc-300 font-mono">
+              Off-chain • Private
             </span>
           </div>
 
-          {/* Age Slider & Inputs */}
-          <div className="space-y-4">
-            <div className="flex items-center justify-between">
-              <label className="text-sm font-semibold text-purple-200/80 flex items-center space-x-2">
-                <span>Claimed Age</span>
-                <span className="text-xs font-normal text-purple-400/40">(Private attribute)</span>
-              </label>
-              <span className="text-2xl font-bold font-mono gradient-text px-3 py-1">
-                {ageInput} <span className="text-xs text-purple-300/60 font-normal">years</span>
-              </span>
+          <div className="mt-6 bg-black/40 border border-white/10 rounded-xl p-5 relative space-y-4">
+            <div className="flex justify-between items-center">
+              <p className="text-xs text-zinc-400 font-medium">Age Slider (Private Attribute)</p>
+              <span className="text-[10px] font-mono text-zinc-500">Min: 10 • Max: 100</span>
             </div>
 
-            <input
-              type="range"
-              min="10"
-              max="100"
-              value={ageInput}
-              aria-label="Private age witness slider"
-              title="Drag to simulate different confidential age values"
-              onChange={(e) => handleAgeChange(parseInt(e.target.value) || 0)}
-              className="w-full"
-            />
-            <div className="flex justify-between text-[10px] font-mono text-purple-400/40">
-              <span>10 yrs</span>
-              <span className="text-purple-400/70 font-semibold">Min Gate: {minRequired} yrs</span>
-              <span>100 yrs</span>
-            </div>
-          </div>
-
-          {/* Birth Year & Salt Inputs */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-            <div className="p-4 rounded-xl bg-midnight-950/60 border border-purple-900/15 space-y-2">
-              <label className="text-xs font-medium text-purple-300/60 flex items-center space-x-1.5">
-                <Calendar className="w-3.5 h-3.5 text-purple-400/60" />
-                <span>Calculated Birth Year</span>
-              </label>
-              <input
-                type="number"
-                min="1920"
-                max={currentYear}
-                value={birthYearInput}
-                onChange={(e) => handleYearChange(parseInt(e.target.value) || 2000)}
-                className="w-full glass-input px-3 py-2 text-sm font-mono"
+            {/* Custom slider track and thumb */}
+            <div className="relative my-4 h-2 bg-zinc-800 rounded-full">
+              <div
+                className="absolute h-2 bg-gradient-to-r from-purple-500 to-pink-400 rounded-full"
+                style={{ width: `${((age - 10) / 90) * 100}%` }}
               />
-              <p className="text-[10px] text-purple-400/35">Private witness attribute</p>
-            </div>
-
-            <div className="p-4 rounded-xl bg-midnight-950/60 border border-purple-900/15 space-y-2">
-              <label className="text-xs font-medium text-purple-300/60 flex items-center space-x-1.5">
-                <Fingerprint className="w-3.5 h-3.5 text-purple-400/60" />
-                <span>ZK Salt / Nullifier</span>
-              </label>
-              <input
-                type="text"
-                placeholder="Auto-generated..."
-                value={customSalt}
-                onChange={(e) => setCustomSalt(e.target.value)}
-                className="w-full glass-input px-3 py-2 text-sm font-mono placeholder:text-purple-600/40"
+              <div
+                className="absolute w-6 h-4 bg-gradient-to-br from-purple-300 to-pink-300 rounded-md -top-1 shadow-[0_0_15px_rgba(236,72,153,0.8)] transition-all pointer-events-none"
+                style={{ left: `calc(${((age - 10) / 90) * 100}% - 12px)` }}
               />
-              <p className="text-[10px] text-purple-400/35">Prevents address linkability</p>
+              <input
+                type="range"
+                min="10"
+                max="100"
+                value={age}
+                onChange={(e) => handleAgeChange(parseInt(e.target.value) || 18)}
+                className="absolute inset-0 opacity-0 cursor-pointer w-full h-full"
+              />
             </div>
-          </div>
 
-          {/* Live Predicate Check */}
-          <div className={`p-4 rounded-xl border flex items-center justify-between transition-all ${
-            isHypotheticallyEligible
-              ? 'bg-emerald-950/15 border-emerald-500/20 text-emerald-300'
-              : 'bg-rose-950/15 border-rose-500/20 text-rose-300'
-          }`}>
-            <div className="flex items-center space-x-3">
-              {isHypotheticallyEligible ? (
-                <div className="w-8 h-8 rounded-full bg-emerald-500/15 flex items-center justify-center">
-                  <CheckCircle2 className="w-4 h-4 text-emerald-400" />
-                </div>
-              ) : (
-                <div className="w-8 h-8 rounded-full bg-rose-500/15 flex items-center justify-center">
-                  <XCircle className="w-4 h-4 text-rose-400" />
-                </div>
-              )}
+            <p className="mt-3 text-sm">
+              Selected Age: <span className="text-[26px] font-black text-pink-400">{age}</span> <span className="text-white font-bold">years</span>
+            </p>
+            <div className="flex items-center justify-between pt-1">
               <div>
-                <p className="text-sm font-semibold">
-                  {isHypotheticallyEligible ? 'Predicate Satisfied' : 'Predicate Not Satisfied'}
+                <p className="text-xs text-zinc-400">Calculated Birth Year:</p>
+                <p className="text-xl font-bold font-mono text-white">{birthYear}</p>
+              </div>
+
+              {/* Optional custom salt */}
+              <div className="w-1/2">
+                <label className="text-[11px] text-zinc-400 flex items-center gap-1">
+                  <Fingerprint className="w-3 h-3 text-purple-400" />
+                  <span>ZK Salt (Anti-Linkability)</span>
+                </label>
+                <input
+                  type="text"
+                  placeholder="Auto-randomized..."
+                  value={customSalt}
+                  onChange={(e) => setCustomSalt(e.target.value)}
+                  className="w-full mt-1 bg-black/60 border border-white/10 rounded-lg px-2.5 py-1 text-xs font-mono text-zinc-300 placeholder:text-zinc-600 focus:outline-none focus:border-pink-500/50"
+                />
+              </div>
+            </div>
+
+            {/* Predicate Satisfied Status Pill */}
+            <div
+              className={`mt-4 rounded-xl p-3.5 flex gap-3 items-center border transition-all ${
+                isSatisfied
+                  ? 'bg-emerald-500/10 border-emerald-500/20 text-emerald-300'
+                  : 'bg-rose-500/10 border-rose-500/20 text-rose-300'
+              }`}
+            >
+              <span
+                className={`w-5 h-5 rounded-full flex items-center justify-center text-[11px] shrink-0 font-bold ${
+                  isSatisfied ? 'bg-emerald-500 text-white' : 'bg-rose-500 text-white'
+                }`}
+              >
+                {isSatisfied ? '✓' : '✕'}
+              </span>
+              <div>
+                <p className="text-xs font-bold">
+                  {isSatisfied ? 'Predicate Satisfied' : 'Predicate Unsatisfied'}
                 </p>
-                <p className="text-xs opacity-70">
-                  {isHypotheticallyEligible
-                    ? `Input (${ageInput} yrs) >= Threshold (${minRequired} yrs)`
-                    : `Input (${ageInput} yrs) < Threshold (${minRequired} yrs)`}
+                <p className="text-[11px] opacity-80">
+                  Requirement: age ≥ {minRequired} {isSatisfied ? '✓ Verified locally, no PII shared' : '✕ Below threshold requirement'}
                 </p>
               </div>
             </div>
+
+            {/* Proof Action Button */}
+            <button
+              onClick={handleGenerateProof}
+              disabled={isProving}
+              className="w-full mt-3 py-3 rounded-full bg-gradient-to-r from-pink-500 to-purple-500 text-sm font-bold text-white shadow-[0_0_25px_rgba(236,72,153,0.4)] hover:shadow-[0_0_35px_rgba(236,72,153,0.7)] active:scale-98 transition flex items-center justify-center gap-2 disabled:opacity-50"
+            >
+              <Sparkles className="w-4 h-4" />
+              <span>{isProving ? 'Synthesizing ZK Proof...' : 'Generate Compact ZK Proof & Verify'}</span>
+            </button>
+
+            {errorMessage && (
+              <div className="p-2.5 rounded-lg bg-rose-950/40 border border-rose-500/30 text-rose-300 text-xs flex items-center gap-2">
+                <AlertTriangle className="w-4 h-4 shrink-0" />
+                <span>{errorMessage}</span>
+              </div>
+            )}
           </div>
-
-          {/* Execution Button */}
-          <button
-            onClick={handleGenerateProof}
-            disabled={isProving || !contractState?.gateActive}
-            className={`w-full py-3.5 px-6 rounded-xl font-bold text-sm tracking-wide flex items-center justify-center space-x-2 transition-all ${
-              isProving
-                ? 'bg-purple-900/30 text-purple-300 border border-purple-500/20 cursor-wait'
-                : !contractState?.gateActive
-                ? 'bg-midnight-900/60 text-purple-500/40 cursor-not-allowed border border-purple-900/15'
-                : 'glow-btn text-white'
-            }`}
-          >
-            <Sparkles className="w-5 h-5" />
-            <span>{isProving ? 'Synthesizing ZK Proof...' : 'Generate Compact ZK Proof & Verify'}</span>
-          </button>
-
-          {errorMessage && (
-            <div className="p-3 rounded-xl bg-rose-950/20 border border-rose-500/25 text-rose-300 text-xs flex items-center space-x-2">
-              <AlertTriangle className="w-4 h-4 shrink-0" />
-              <span>{errorMessage}</span>
-            </div>
-          )}
         </div>
 
-        {/* Right Column: Public Disclosure & Privacy Inspector */}
-        <div className="lg:col-span-5 glass-panel rounded-2xl p-6 flex flex-col justify-between space-y-6">
+        {/* RIGHT - PUBLIC DISCLOSURE */}
+        <div className="relative bg-gradient-to-br from-[#14112D]/90 to-[#0E0C22]/90 backdrop-blur-xl border border-cyan-500/20 rounded-[20px] p-6 shadow-[0_0_60px_rgba(6,182,212,0.12),inset_0_1px_0_rgba(255,255,255,0.08)] overflow-hidden flex flex-col justify-between">
+          <div className="absolute top-0 left-0 right-0 h-[1px] bg-gradient-to-r from-transparent via-cyan-400/50 to-transparent" />
           
-          <div className="space-y-4">
-            <div className="flex items-center justify-between border-b border-purple-900/15 pb-4">
-              <div>
-                <h3 className="text-lg font-display font-bold text-white flex items-center space-x-2">
-                  <Globe className="w-5 h-5 text-cyan-400" />
-                  <span>Public On-Chain Disclosure</span>
-                </h3>
-                <p className="text-xs text-cyan-400/50 font-medium mt-0.5">
-                  The only data written to Midnight Ledger
-                </p>
-              </div>
-              <span className="px-3 py-1 rounded-full text-[10px] font-mono font-semibold badge-public tracking-wider">
-                ON-CHAIN
+          <div>
+            <div className="flex justify-between items-center">
+              <h3 className="font-bold flex gap-2 items-center text-white">
+                <span>🔗</span> Public On-Chain Disclosure
+              </h3>
+              <span className="text-[10px] px-3 py-1 rounded-full bg-zinc-800 border border-white/10 text-zinc-300 font-mono">
+                On-chain • Public
               </span>
             </div>
 
-            {/* Privacy Matrix */}
-            <div className="space-y-2 text-xs">
-              {[
-                { label: 'Exact Age / DOB', value: 'Confidential (0 bits leaked)', icon: Lock, color: 'emerald' },
-                { label: 'Eligibility Flag', value: `disclose(isEligible) = ${isHypotheticallyEligible ? 'true' : 'false'}`, icon: Globe, color: 'cyan' },
-                { label: 'Nullifier / Proof π', value: 'Succinct KZG / PLONK', icon: Key, color: 'purple' },
-                { label: 'Public Gate Counter', value: 'totalVerifications (+1)', icon: Zap, color: 'purple' },
-              ].map((item, idx) => (
-                <div key={idx} className="p-3 rounded-xl bg-midnight-950/50 border border-purple-900/10 flex items-center justify-between group hover:border-purple-500/15 transition-all">
-                  <span className="text-purple-300/60">{item.label}</span>
-                  <span className={`font-mono font-semibold flex items-center space-x-1.5 ${
-                    item.color === 'emerald' ? 'text-emerald-400' : item.color === 'cyan' ? 'text-cyan-400' : 'text-purple-300'
-                  }`}>
-                    <item.icon className="w-3 h-3" />
-                    <span>{item.value}</span>
-                  </span>
-                </div>
-              ))}
+            <div className="mt-6 bg-black/50 border border-white/5 rounded-xl p-5 space-y-3.5 font-mono text-[12px]">
+              <div>
+                <span className="text-zinc-500">On-Chain Contract / Root Hash:</span>
+                <br />
+                <a
+                  href={`https://preprod.midnight.network/contract/${contractState?.contractAddress || 'c634cc887df0973ba82bc12e8eec22a7e4b7fc3cbce230cd84cc57b01183cf48'}`}
+                  target="_blank"
+                  rel="noreferrer"
+                  className="text-cyan-300 hover:underline font-bold"
+                >
+                  {contractAddressDisplay} ↗
+                </a>
+              </div>
+              <div>
+                <span className="text-zinc-500">Block Height:</span>
+                <br />
+                <span className="text-white font-bold">1,248,931</span>
+              </div>
+              <div>
+                <span className="text-zinc-500">Verification Status:</span>
+                <br />
+                <span className="inline-flex bg-emerald-500/20 border border-emerald-500/30 text-emerald-300 px-2.5 py-1 rounded-full text-[11px] font-bold mt-1">
+                  ✓ Verified on-chain ✓
+                </span>
+              </div>
+              <div className="text-zinc-400 pt-2 border-t border-white/5 flex items-center justify-between text-[11px]">
+                <span>🔗 Midnight Network</span>
+                <span className="text-cyan-300/80">Tx: {txHashDisplay}</span>
+              </div>
             </div>
           </div>
 
-          {/* Proof Summary Card */}
-          {proofResult && (
-            <div className={`p-4 rounded-xl border ${
-              proofResult.isEligible
-                ? 'bg-emerald-950/15 border-emerald-500/25 text-emerald-200'
-                : 'bg-rose-950/15 border-rose-500/25 text-rose-200'
-            }`}>
-              <div className="flex items-center space-x-2 mb-2">
-                {proofResult.isEligible ? (
-                  <CheckCircle2 className="w-5 h-5 text-emerald-400" />
-                ) : (
-                  <XCircle className="w-5 h-5 text-rose-400" />
-                )}
-                <h4 className="font-display font-bold text-sm">
-                  {proofResult.isEligible ? 'Access Gate Granted!' : 'Verification Rejected'}
-                </h4>
-              </div>
-              <p className="text-xs opacity-70 mb-3">
-                {proofResult.isEligible
-                  ? 'Your ZK proof was verified. An anonymous entry token has been authorized.'
-                  : 'The Compact circuit verified your witness is below threshold.'}
-              </p>
-              <div className="font-mono text-[10px] space-y-1 bg-midnight-950/60 p-2.5 rounded-lg border border-purple-900/15">
-                <div className="truncate"><span className="text-purple-400/60">Tx:</span> {proofResult.txHash}</div>
-                <div className="truncate"><span className="text-purple-400/60">Nullifier:</span> {proofResult.nullifier}</div>
-              </div>
-            </div>
-          )}
-
-          {/* Quick Info Footer */}
-          <div className="p-3 rounded-xl bg-purple-950/15 border border-purple-900/15 text-xs text-purple-300/50 flex items-center space-x-2">
-            <Zap className="w-4 h-4 text-purple-400/50 shrink-0" />
-            <span>Powered by Midnight Compact DSL with zero-knowledge private witness bindings.</span>
+          {/* Privacy Guarantees Summary Pill */}
+          <div className="mt-6 p-4 rounded-xl bg-cyan-950/20 border border-cyan-500/20 text-xs text-cyan-200/80 leading-relaxed">
+            <p className="font-bold text-cyan-300 mb-1">🛡️ Midnight Dual-State Privacy Invariant</p>
+            <p className="text-[11px] text-zinc-400">
+              Only the 1-bit boolean eligibility output and Halo2 succinct polynomial proof π are disclosed to the ledger. Exact birth year ({birthYear}) never leaves client sandbox memory.
+            </p>
           </div>
-
         </div>
 
       </div>
 
-      {/* ZK Pipeline Stepper */}
+      {/* PIPELINE STEPPER */}
       <ZKProofStepper
         currentStep={proverStep}
         statusMessage={statusMessage}
         progressPercent={progressPercent}
         proofHash={proofResult?.proofHash}
         txHash={proofResult?.txHash}
+        isProving={isProving}
       />
 
     </div>

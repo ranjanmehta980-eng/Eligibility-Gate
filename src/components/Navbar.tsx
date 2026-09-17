@@ -3,7 +3,7 @@
 import React, { useState, useEffect } from 'react';
 import { LaceWalletService } from '@/midnight/laceConnector';
 import { WalletAccount } from '@/midnight/types';
-import { ShieldCheck, Wallet, Lock, ExternalLink, LogOut, CheckCircle2, Menu, X } from 'lucide-react';
+import { ShieldCheck, Lock, CheckCircle2, Menu, X, LogOut } from 'lucide-react';
 
 interface NavbarProps {
   onNavSelect?: (tab: string) => void;
@@ -15,18 +15,11 @@ export const Navbar: React.FC<NavbarProps> = ({ onNavSelect, activeTab = 'gate' 
   const [connecting, setConnecting] = useState(false);
   const [copied, setCopied] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-  const [scrolled, setScrolled] = useState(false);
 
   useEffect(() => {
     const service = LaceWalletService.getInstance();
     const unsub = service.subscribe((acc) => setWallet(acc));
     return () => unsub();
-  }, []);
-
-  useEffect(() => {
-    const handleScroll = () => setScrolled(window.scrollY > 20);
-    window.addEventListener('scroll', handleScroll);
-    return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
   const handleConnect = async () => {
@@ -60,105 +53,88 @@ export const Navbar: React.FC<NavbarProps> = ({ onNavSelect, activeTab = 'gate' 
   ];
 
   return (
-    <header className={`sticky top-0 z-50 w-full transition-all duration-300 ${
-      scrolled 
-        ? 'bg-midnight-950/90 backdrop-blur-xl border-b border-purple-900/20 shadow-lg shadow-black/20' 
-        : 'bg-transparent'
-    }`}>
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
-        
-        {/* Brand */}
-        <div className="flex items-center space-x-3 cursor-pointer group" onClick={() => onNavSelect?.('gate')}>
-          <div className="relative flex items-center justify-center w-10 h-10 rounded-xl bg-gradient-to-tr from-purple-600 via-pink-500 to-indigo-600 shadow-glow-purple transition-transform group-hover:scale-105">
-            <ShieldCheck className="w-5 h-5 text-white" />
-          </div>
-          <div>
-            <h1 className="text-lg font-display font-bold tracking-tight">
-              <span className="gradient-text">Midnight</span>
-              <span className="text-white">Gate</span>
-            </h1>
-          </div>
-        </div>
-
-        {/* Desktop Navigation */}
-        <nav className="hidden md:flex items-center space-x-1">
-          {navItems.map((item) => (
-            <button
-              key={item.id}
-              onClick={() => onNavSelect?.(item.id)}
-              className={`px-4 py-2 text-sm font-medium rounded-xl transition-all duration-200 relative ${
-                activeTab === item.id
-                  ? 'text-white'
-                  : 'text-purple-300/60 hover:text-purple-100'
-              }`}
-            >
-              {activeTab === item.id && (
-                <div className="absolute inset-0 rounded-xl bg-purple-500/15 border border-purple-500/25" />
-              )}
-              <span className="relative z-10">{item.label}</span>
-            </button>
-          ))}
-        </nav>
-
-        {/* Right Side: Network + Wallet */}
-        <div className="flex items-center space-x-3">
-          {/* Network Badge */}
-          <div className="hidden lg:flex items-center space-x-2 px-3 py-1.5 rounded-full bg-midnight-900/60 border border-purple-900/30 text-xs">
-            <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
-            <span className="text-purple-200/80 font-medium">Preprod</span>
-            <span className="text-purple-500/40">•</span>
-            <span className="text-purple-300/50 font-mono text-[10px]">Halo2</span>
-          </div>
-
-          {/* Wallet State */}
-          {wallet?.isConnected ? (
-            <div className="flex items-center space-x-2">
-              <div 
-                onClick={copyAddress}
-                className="group cursor-pointer flex items-center space-x-2 px-3 py-1.5 rounded-xl bg-midnight-900/60 border border-purple-500/20 hover:border-purple-400/40 transition-all text-xs"
-                title="Click to copy address"
-              >
-                <div className="w-5 h-5 rounded-full bg-gradient-to-r from-purple-500 to-pink-500 flex items-center justify-center text-white">
-                  <Lock className="w-2.5 h-2.5" />
-                </div>
-                <span className="font-mono text-purple-200 font-medium">
-                  {wallet.address.substring(0, 8)}...{wallet.address.substring(wallet.address.length - 4)}
-                </span>
-                {copied && <CheckCircle2 className="w-3.5 h-3.5 text-emerald-400" />}
-              </div>
-
-              <button
-                onClick={handleDisconnect}
-                className="p-2 rounded-xl bg-midnight-900/60 border border-purple-900/30 hover:bg-rose-950/30 hover:border-rose-500/30 text-purple-400 hover:text-rose-400 transition-all"
-                title="Disconnect Wallet"
-              >
-                <LogOut className="w-4 h-4" />
-              </button>
-            </div>
-          ) : (
-            <button
-              onClick={handleConnect}
-              disabled={connecting}
-              className="glow-btn flex items-center space-x-2 px-5 py-2 rounded-full text-white font-semibold text-sm disabled:opacity-60 disabled:cursor-wait"
-            >
-              <Wallet className="w-4 h-4" />
-              <span>{connecting ? 'Connecting...' : 'Connect Lace'}</span>
-            </button>
-          )}
-
-          {/* Mobile Menu Toggle */}
-          <button
-            onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-            className="md:hidden p-2 rounded-xl bg-midnight-900/60 border border-purple-900/30 text-purple-300"
-          >
-            {mobileMenuOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
-          </button>
-        </div>
+    <header className="max-w-7xl mx-auto flex justify-between items-center bg-gradient-to-r from-[#12102A]/90 to-[#1A1035]/90 backdrop-blur-2xl border border-purple-500/30 rounded-[18px] px-6 py-4 shadow-[0_0_40px_rgba(168,85,247,0.15),inset_0_1px_0_rgba(255,255,255,0.1)] relative z-50">
+      {/* Brand Logo */}
+      <div
+        className="flex items-center gap-3 font-black text-lg cursor-pointer group select-none"
+        onClick={() => onNavSelect?.('gate')}
+      >
+        <span className="w-9 h-9 rounded-xl bg-gradient-to-br from-fuchsia-500 to-purple-600 flex items-center justify-center shadow-[0_0_20px_rgba(217,70,239,0.6)] text-white text-base">
+          🛡️
+        </span>
+        <span className="tracking-tight font-black">
+          Midnight<span className="text-pink-400">Gate</span>
+        </span>
+        <span className="text-[10px] font-mono bg-purple-500/20 border border-purple-500/40 px-2.5 py-1 rounded-full text-purple-300">
+          ZK • v0.4.1
+        </span>
       </div>
 
-      {/* Mobile Navigation Drawer */}
+      {/* Desktop Nav Items */}
+      <div className="hidden md:flex gap-7 text-[13px] text-zinc-400 font-medium">
+        {navItems.map((item) => (
+          <button
+            key={item.id}
+            onClick={() => onNavSelect?.(item.id)}
+            className={`transition-all pb-1 ${
+              activeTab === item.id
+                ? 'text-purple-300 border-b-2 border-purple-400 font-bold shadow-[0_1px_10px_rgba(168,85,247,0.4)]'
+                : 'hover:text-zinc-200'
+            }`}
+          >
+            {item.label}
+          </button>
+        ))}
+      </div>
+
+      {/* Right Side: Wallet Connection */}
+      <div className="flex items-center gap-3">
+        {wallet?.isConnected ? (
+          <div className="flex items-center gap-2">
+            <div
+              onClick={copyAddress}
+              className="cursor-pointer flex items-center gap-2 px-4 py-2 rounded-full bg-purple-950/40 border border-purple-500/30 hover:border-pink-500/50 transition-all text-xs"
+              title="Click to copy wallet address"
+            >
+              <div className="w-4 h-4 rounded-full bg-gradient-to-r from-purple-500 to-pink-500 flex items-center justify-center text-white text-[10px]">
+                <Lock className="w-2.5 h-2.5" />
+              </div>
+              <span className="font-mono text-purple-200 font-medium">
+                {wallet.address.substring(0, 7)}...{wallet.address.substring(wallet.address.length - 4)}
+              </span>
+              {copied && <CheckCircle2 className="w-3.5 h-3.5 text-emerald-400" />}
+            </div>
+
+            <button
+              onClick={handleDisconnect}
+              className="p-2 rounded-full bg-black/40 border border-white/10 hover:border-rose-500/40 text-zinc-400 hover:text-rose-400 transition"
+              title="Disconnect Wallet"
+            >
+              <LogOut className="w-3.5 h-3.5" />
+            </button>
+          </div>
+        ) : (
+          <button
+            onClick={handleConnect}
+            disabled={connecting}
+            className="px-6 py-2.5 rounded-full bg-gradient-to-r from-pink-500 to-purple-500 text-sm font-bold shadow-[0_0_25px_rgba(236,72,153,0.5)] hover:shadow-[0_0_35px_rgba(236,72,153,0.7)] active:scale-95 transition disabled:opacity-50"
+          >
+            {connecting ? 'Connecting...' : '🔗 Connect Lace'}
+          </button>
+        )}
+
+        {/* Mobile menu trigger */}
+        <button
+          onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+          className="md:hidden p-2 rounded-xl bg-purple-950/40 border border-purple-500/30 text-purple-300"
+        >
+          {mobileMenuOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
+        </button>
+      </div>
+
+      {/* Mobile Drawer */}
       {mobileMenuOpen && (
-        <div className="md:hidden absolute top-16 left-0 right-0 bg-midnight-950/95 backdrop-blur-xl border-b border-purple-900/20 p-4 space-y-1 animate-fade-in-up">
+        <div className="md:hidden absolute top-20 left-0 right-0 bg-[#12102A]/95 backdrop-blur-2xl border border-purple-500/30 rounded-2xl p-4 space-y-2 shadow-2xl">
           {navItems.map((item) => (
             <button
               key={item.id}
@@ -166,10 +142,10 @@ export const Navbar: React.FC<NavbarProps> = ({ onNavSelect, activeTab = 'gate' 
                 onNavSelect?.(item.id);
                 setMobileMenuOpen(false);
               }}
-              className={`w-full text-left px-4 py-3 text-sm font-medium rounded-xl transition-all ${
+              className={`w-full text-left px-4 py-2.5 text-sm font-medium rounded-xl transition ${
                 activeTab === item.id
-                  ? 'bg-purple-500/15 text-white border border-purple-500/25'
-                  : 'text-purple-300/60 hover:text-white hover:bg-purple-900/10'
+                  ? 'bg-purple-500/20 text-purple-200 border border-purple-500/30'
+                  : 'text-zinc-400 hover:text-white'
               }`}
             >
               {item.label}
