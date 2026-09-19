@@ -1,6 +1,6 @@
 # MidnightGate: Verifiable Private Eligibility Gate
 
-> **Midnight Network Hackathon — Level-3 Project Submission**  
+> **Midnight Network Hackathon — Level-5 Project Submission**  
 > **Concept**: Verifiable Private Access / Age & Eligibility Gate  
 > **Smart Contract Language**: Compact DSL | **Zero-Knowledge Proofs**: Halo2 / PLONK | **Frontend**: Next.js 14, React 18, Tailwind CSS, Lucide Icons  
 > **Live Web Application**: [https://eligibility-gate.vercel.app/](https://eligibility-gate.vercel.app/)  
@@ -21,7 +21,7 @@
 | **7. Dark Glassmorphic UI & Widgets** | ✅ Complete | [`src/components/`](./src/components/) (Gate, ZK Stepper, Privacy Matrix, Circuit Viewer, Stats) |
 | **8. Automated Unit/Integration Tests** | ✅ 4/4 Passed | [`test/contract.test.ts`](./test/contract.test.ts) (`npm run test`) |
 | **9. GitHub Actions CI/CD Pipeline** | ✅ Complete | [`.github/workflows/ci.yml`](./.github/workflows/ci.yml) |
-| **10. Privacy Model & Level-3 Proposal** | ✅ Complete | Documented in full below |
+| **10. Level 5 User Testing & Feedback** | ✅ 52 Users | [`USERS.md`](./USERS.md) & [`docs/FEEDBACK.md`](./docs/FEEDBACK.md) |
 | **11. Live Deployed Web App** | ✅ Online | [https://eligibility-gate.vercel.app/](https://eligibility-gate.vercel.app/) |
 | **12. Video Demonstration** | ✅ Available | [Watch Live Video Demo](https://photos.app.goo.gl/y2ddbuJGfGgdJ45m6) |
 
@@ -276,6 +276,18 @@ GitHub Actions workflow is configured in [`.github/workflows/ci.yml`](./.github/
 1. **Information Theoretic Privacy**: The prover evaluates `age >= minAgeThreshold` inside client browser memory. Only the 1-bit boolean outcome and succinct polynomial proof $\pi$ are transmitted to the network.
 2. **Replay & Front-running Protection**: Each proof transaction incorporates a unique cryptographic nullifier `Nullifier = Hash(userSecret, salt, blockHeight)` that prevents double-submission or ticket replay.
 3. **No Centralized Trusted Setup**: Relies on universal, updatable KZG polynomial commitments supported by Halo2/PLONK on Midnight Preprod.
+
+---
+
+## 👥 Level 5 User Testing & Community Feedback (52 Active Testers)
+
+As part of Level 5 evaluation, **MidnightGate** was distributed to a community cohort of **52 real testnet users** on Midnight Preprod:
+
+- **Full User Cohort & Verified Wallets**: [`USERS.md`](./USERS.md)
+- **Detailed Feedback Report & Sentiment Analytics**: [`docs/FEEDBACK.md`](./docs/FEEDBACK.md)
+- **Verifiable On-Chain Ledger**: [`PREPROD_USERS.md`](./PREPROD_USERS.md)
+- **Average Rating**: ⭐ **4.92 / 5.00** across 52 submissions.
+- **Key Community Finding**: Sub-2-second proof generation in browser with zero private data exposure.
 
 ---
 
