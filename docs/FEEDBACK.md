@@ -8,6 +8,8 @@ This document aggregates and analyzes the feedback collected from **52 community
 
 - **Total Feedback Submissions**: 52 Users
 - **Average User Rating**: ⭐ **4.92 / 5.00**
+- **Google Feedback Form**: [Eligibility Gate - Google Forms](https://docs.google.com/forms/d/e/1FAIpQLSeV-oR0iWcEuXesMzXszs0u8tCe96fOTQc27Uk1mHcq8gU9-A/viewform)
+- **Live Google Response Sheet**: [View Real-Time Form Responses (Google Sheets)](https://docs.google.com/spreadsheets/d/1b-c50bc8J2kueLKR055WRalYLz9NDItdqIw9CHp6T94/edit?usp=sharing)
 - **Testnet Contract Address**: [`c634cc887df0973ba82bc12e8eec22a7e4b7fc3cbce230cd84cc57b01183cf48`](https://preprod.midnight.network/contract/c634cc887df0973ba82bc12e8eec22a7e4b7fc3cbce230cd84cc57b01183cf48)
 - **Primary Channels**: Midnight Discord, Developer Telegram, Web3 Student Communities, X (Twitter)
 

@@ -283,6 +283,8 @@ GitHub Actions workflow is configured in [`.github/workflows/ci.yml`](./.github/
 
 As part of Level 5 evaluation, **MidnightGate** was distributed to a community cohort of **52 real testnet users** on Midnight Preprod:
 
+- **Google Feedback Form**: [Eligibility Gate - Google Forms](https://docs.google.com/forms/d/e/1FAIpQLSeV-oR0iWcEuXesMzXszs0u8tCe96fOTQc27Uk1mHcq8gU9-A/viewform)
+- **Live Google Response Sheet**: [View Real-Time Form Responses (Google Sheets)](https://docs.google.com/spreadsheets/d/1b-c50bc8J2kueLKR055WRalYLz9NDItdqIw9CHp6T94/edit?usp=sharing)
 - **Full User Cohort & Verified Wallets**: [`USERS.md`](./USERS.md)
 - **Detailed Feedback Report & Sentiment Analytics**: [`docs/FEEDBACK.md`](./docs/FEEDBACK.md)
 - **Verifiable On-Chain Ledger**: [`PREPROD_USERS.md`](./PREPROD_USERS.md)
