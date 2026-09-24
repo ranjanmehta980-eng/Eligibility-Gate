@@ -1,244 +1,136 @@
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Space+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Special+Elite&family=IBM+Plex+Mono:wght@400;500;600;700&display=swap');
 
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
-@layer base {
-  :root {
-    --background: #050510;
-    --foreground: #f1f5f9;
-    --accent-purple: #a855f7;
-    --accent-pink: #ec4899;
-    --accent-cyan: #06b6d4;
-  }
+:root {
+  --void: #0a0a0c;
+  --panel: #17171a;
+  --panel2: #1e1e22;
+  --rule: #2c2c30;
+  --paper: #e8e5dc;
+  --muted: #84878c;
+  --dim: #55575c;
+  --red: #c4483a;
+  --green: #5aa07d;
+  --black: #000;
+}
+
+* {
+  box-sizing: border-box;
 }
 
 body {
-  color: var(--foreground);
-  background-image: url('/dark_cosmic_zk_background.webp');
-  background-size: cover;
-  background-attachment: fixed;
-  background-position: center;
-  background-color: #060311;
-  font-family: 'Inter', system-ui, -apple-system, sans-serif;
-  overflow-x: hidden;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
+  margin: 0;
+  background: var(--void);
+  color: var(--paper);
+  font-family: 'IBM Plex Mono', ui-monospace, Consolas, monospace;
+  font-size: 15px;
+  line-height: 1.6;
+  background-image:
+    radial-gradient(ellipse at 20% -10%, rgba(90,160,125,0.06), transparent 40%),
+    repeating-linear-gradient(0deg, rgba(255,255,255,0.012) 0px, rgba(255,255,255,0.012) 1px, transparent 1px, transparent 3px);
+  min-height: 100vh;
 }
 
-/* ========================================
-   Glassmorphism Cards
-   ======================================== */
-.card,
-.glass-panel {
-  background: rgba(18, 16, 42, 0.8);
-  backdrop-filter: blur(20px);
-  -webkit-backdrop-filter: blur(20px);
-  border: 1px solid rgba(168, 85, 247, 0.2);
-  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.4);
-  transition: border-color 0.3s ease, box-shadow 0.3s ease, transform 0.3s ease;
+.stamp-font {
+  font-family: 'Special Elite', ui-monospace, monospace;
 }
 
-.card:hover,
-.glass-panel:hover {
-  border-color: rgba(168, 85, 247, 0.4);
-  box-shadow: 0 8px 40px rgba(0, 0, 0, 0.5), 0 0 25px rgba(168, 85, 247, 0.15);
+/* Redaction styling */
+.redact {
+  background: var(--black);
+  color: var(--black);
+  padding: 1px 10px;
+  border-radius: 1px;
+  user-select: none;
+  transition: color .25s ease, background .25s ease;
+  display: inline-block;
 }
 
-.glass-panel-glow {
-  background: rgba(10, 11, 26, 0.7);
-  backdrop-filter: blur(24px);
-  -webkit-backdrop-filter: blur(24px);
-  border: 1px solid rgba(168, 85, 247, 0.25);
-  box-shadow: 0 0 30px rgba(139, 92, 246, 0.12), 0 8px 32px rgba(0, 0, 0, 0.5);
+.redact:hover,
+.redact.open {
+  color: var(--paper);
+  background: transparent;
+  outline: 1px dashed var(--rule);
 }
 
-.glass-input {
-  background: rgba(5, 5, 16, 0.6);
-  border: 1px solid rgba(139, 92, 246, 0.2);
-  color: #f1f5f9;
-  border-radius: 12px;
-  transition: all 0.25s ease;
+/* Stamped circular seal */
+.stamp {
+  width: 132px;
+  height: 132px;
+  border: 3px solid var(--green);
+  border-radius: 50%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  color: var(--green);
+  font-family: 'Special Elite', monospace;
+  font-size: 12.5px;
+  transform: rotate(-11deg);
+  opacity: 0.92;
+  line-height: 1.4;
+  box-shadow: inset 0 0 0 4px rgba(90,160,125,0.15);
 }
 
-.glass-input:focus {
-  outline: none;
-  border-color: rgba(168, 85, 247, 0.6);
-  box-shadow: 0 0 0 3px rgba(168, 85, 247, 0.15), 0 0 16px rgba(168, 85, 247, 0.2);
+.stamp .big {
+  font-size: 16px;
+  letter-spacing: 0.05em;
+  margin: 2px 0;
+  font-weight: bold;
 }
 
-/* ========================================
-   Gradient Text Utility
-   ======================================== */
-.gradient-text {
-  background: linear-gradient(135deg, #c084fc 0%, #f472b6 40%, #a78bfa 70%, #67e8f9 100%);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
-}
-
-.gradient-text-subtle {
-  background: linear-gradient(135deg, #e2d6ff 0%, #d8b4fe 50%, #c4b5fd 100%);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
-}
-
-/* ========================================
-   Card Hover Lift
-   ======================================== */
-.card-hover-lift {
-  transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
-}
-.card-hover-lift:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.5), 0 0 20px rgba(139, 92, 246, 0.08);
-}
-
-/* ========================================
-   Glow Button
-   ======================================== */
-.glow-btn {
-  background: linear-gradient(135deg, #a855f7 0%, #ec4899 50%, #8b5cf6 100%);
-  background-size: 200% 200%;
-  animation: gradient-shift 4s ease infinite;
-  box-shadow: 0 4px 20px rgba(168, 85, 247, 0.3);
-  transition: all 0.3s ease;
-}
-.glow-btn:hover {
-  box-shadow: 0 6px 30px rgba(168, 85, 247, 0.5), 0 0 40px rgba(236, 72, 153, 0.2);
-  transform: translateY(-1px);
-}
-.glow-btn:active {
-  transform: translateY(0px) scale(0.98);
-}
-
-@keyframes gradient-shift {
-  0%, 100% { background-position: 0% 50%; }
-  50% { background-position: 100% 50%; }
-}
-
-/* ========================================
-   Badges (Refined)
-   ======================================== */
-.badge-private {
-  background: rgba(16, 185, 129, 0.1);
-  border: 1px solid rgba(16, 185, 129, 0.3);
-  color: #34d399;
-  font-weight: 600;
-}
-
-.badge-public {
-  background: rgba(6, 182, 212, 0.1);
-  border: 1px solid rgba(6, 182, 212, 0.3);
-  color: #22d3ee;
-  font-weight: 600;
-}
-
-.badge-zk {
-  background: rgba(168, 85, 247, 0.12);
-  border: 1px solid rgba(168, 85, 247, 0.35);
-  color: #c084fc;
-  font-weight: 600;
-}
-
-/* ========================================
-   Custom Range Slider
-   ======================================== */
-input[type="range"] {
+/* Sliders */
+input[type=range] {
   -webkit-appearance: none;
   appearance: none;
   width: 100%;
-  height: 6px;
-  border-radius: 999px;
-  background: linear-gradient(90deg, rgba(139, 92, 246, 0.2), rgba(139, 92, 246, 0.4));
+  height: 2px;
+  background: var(--rule);
   outline: none;
-  cursor: pointer;
+  margin: 6px 0 18px;
 }
 
-input[type="range"]::-webkit-slider-thumb {
+input[type=range]::-webkit-slider-thumb {
   -webkit-appearance: none;
   appearance: none;
-  width: 20px;
-  height: 20px;
+  width: 14px;
+  height: 14px;
+  background: var(--paper);
   border-radius: 50%;
-  background: linear-gradient(135deg, #a855f7, #ec4899);
-  box-shadow: 0 0 10px rgba(168, 85, 247, 0.5), 0 0 20px rgba(168, 85, 247, 0.2);
   cursor: pointer;
-  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  box-shadow: 0 0 0 4px rgba(232,229,220,0.12);
+  transition: transform 0.15s ease;
 }
 
-input[type="range"]::-webkit-slider-thumb:hover {
-  transform: scale(1.15);
-  box-shadow: 0 0 16px rgba(168, 85, 247, 0.7), 0 0 30px rgba(168, 85, 247, 0.3);
+input[type=range]::-webkit-slider-thumb:hover {
+  transform: scale(1.2);
 }
 
-input[type="range"]::-moz-range-thumb {
-  width: 20px;
-  height: 20px;
-  border-radius: 50%;
-  background: linear-gradient(135deg, #a855f7, #ec4899);
-  box-shadow: 0 0 10px rgba(168, 85, 247, 0.5);
-  cursor: pointer;
+input[type=range]::-moz-range-thumb {
+  width: 14px;
+  height: 14px;
+  background: var(--paper);
   border: none;
+  border-radius: 50%;
+  cursor: pointer;
 }
 
-/* ========================================
-   Custom Scrollbar
-   ======================================== */
+/* Custom Scrollbars */
 ::-webkit-scrollbar {
   width: 5px;
   height: 5px;
 }
 ::-webkit-scrollbar-track {
-  background: #050510;
+  background: var(--void);
 }
 ::-webkit-scrollbar-thumb {
-  background: linear-gradient(180deg, #1a1d45, #8b5cf6);
-  border-radius: 999px;
+  background: var(--rule);
+  border-radius: 2px;
 }
 ::-webkit-scrollbar-thumb:hover {
-  background: linear-gradient(180deg, #252866, #a855f7);
-}
-
-/* ========================================
-   Ambient Background Orbs
-   ======================================== */
-.ambient-orb {
-  position: fixed;
-  border-radius: 50%;
-  filter: blur(120px);
-  pointer-events: none;
-  z-index: -1;
-  opacity: 0.4;
-}
-
-/* ========================================
-   Shimmer Effect for Progress Bars
-   ======================================== */
-.shimmer-bar {
-  background: linear-gradient(
-    90deg,
-    transparent 0%,
-    rgba(255, 255, 255, 0.08) 40%,
-    rgba(255, 255, 255, 0.12) 50%,
-    rgba(255, 255, 255, 0.08) 60%,
-    transparent 100%
-  );
-  background-size: 200% 100%;
-  animation: shimmer 2s linear infinite;
-}
-
-@keyframes shimmer {
-  0% { background-position: -200% 0; }
-  100% { background-position: 200% 0; }
-}
-
-/* ========================================
-   Section Divider
-   ======================================== */
-.section-divider {
-  height: 1px;
-  background: linear-gradient(90deg, transparent, rgba(139, 92, 246, 0.3), transparent);
+  background: var(--dim);
 }

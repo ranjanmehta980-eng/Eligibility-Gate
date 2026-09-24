@@ -13,16 +13,16 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en" className="dark">
-      <body className="min-h-screen bg-midnight-950 text-slate-100 antialiased selection:bg-purple-500/40 selection:text-white relative">
-        {/* Ambient Background Orbs */}
-        <div className="ambient-orb w-[600px] h-[600px] bg-purple-600/20 top-[-200px] left-[-200px] animate-float" />
-        <div className="ambient-orb w-[500px] h-[500px] bg-pink-600/15 bottom-[10%] right-[-150px] animate-float-delayed" />
-        <div className="ambient-orb w-[400px] h-[400px] bg-cyan-600/10 top-[40%] left-[30%] animate-float" style={{ animationDelay: '4s' }} />
-
-        {/* Content */}
-        <div className="relative z-10">
-          {children}
-        </div>
+      <head>
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
+        <link
+          href="https://fonts.googleapis.com/css2?family=Special+Elite&family=IBM+Plex+Mono:wght@400;500;600;700&display=swap"
+          rel="stylesheet"
+        />
+      </head>
+      <body className="min-h-screen bg-[#0a0a0c] text-[#e8e5dc] antialiased selection:bg-[#5aa07d]/30 selection:text-[#e8e5dc] font-mono">
+        {children}
       </body>
     </html>
   );
