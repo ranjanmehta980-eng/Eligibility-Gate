@@ -40,9 +40,9 @@
 | Field | Value |
 | :--- | :--- |
 | **Contract Name** | `EligibilityGateContract` |
-| **Contract Address (Preprod)** | [`c634cc887df0973ba82bc12e8eec22a7e4b7fc3cbce230cd84cc57b01183cf48`](https://preprod.midnight.network/contract/c634cc887df0973ba82bc12e8eec22a7e4b7fc3cbce230cd84cc57b01183cf48) |
+| **Contract Address (Preprod)** | [`c634cc887df0973ba82bc12e8eec22a7e4b7fc3cbce230cd84cc57b01183cf48`](https://preprod.midnightexplorer.com/contracts/0xc634cc887df0973ba82bc12e8eec22a7e4b7fc3cbce230cd84cc57b01183cf48) |
 | **Network** | `Midnight Preprod (Testnet)` |
-| **Midnight Explorer** | [View on Preprod Explorer](https://preprod.midnight.network/contract/c634cc887df0973ba82bc12e8eec22a7e4b7fc3cbce230cd84cc57b01183cf48) |
+| **Midnight Explorer** | [View on Preprod Explorer](https://preprod.midnightexplorer.com/contracts/0xc634cc887df0973ba82bc12e8eec22a7e4b7fc3cbce230cd84cc57b01183cf48) |
 | **Admin / Deployer Address** | `mn_addr_preprod1msjnjlmfg7qykqze2zqmyuqyfpf78z6v5e3xegcp9ltwguysa5vqgu8jva` |
 | **Proof System** | Halo2 / PLONK with KZG Polynomial Commitments |
 | **Default Threshold** | `Age >= 18` (Configurable via Admin Circuit) |
